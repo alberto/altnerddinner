@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+
+<!--EXTERNAL_PROPERTIES: file.solution;file.project;dir.pub.bin;dir.pub-->
+<project name="tareas-comunes">
+	<property name="msbuild" value="${framework::get-framework-directory(framework::get-target-framework())}\msbuild.exe" />
+	
+	<target name="common.build">
+		<property name="msbuild.targets" value="build" />
+
+		<exec program="${msbuild}"
+			  commandline="${file.solution} /t:${msbuild.targets}" 
+			  workingdir="." />
+	</target>
+	
+	<target name="common.rebuild">
+		<property name="msbuild.targets" value="clean;rebuild" />
+		<call target="common.build" />
+	</target>
+
+	<target name="comun.publicar">
+		<exec program="${msbuild}"
+			  commandline="${file.project} /t:ResolveReferences;_CopyWebApplication
+				/p:OutDir=${dir.pub.bin}
+				/p:WebProjectOutputDir=${dir.pub}"
+			  workingdir="." />
+	</target>
+</project>

@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<project name="AltNerdDinner" default="build">
+	<property name="dir.root" value="." />
+	<include buildfile="${dir.root}/common-targets.build" />
+	<property name="file.solution" 	value="${dir.root}/NerdDinner.sln" />
+
+	<target name="build" 	depends="common.build" />
+	<target name="rebuild" 	depends="common.rebuild" />	
+</project>

@@ -1,7 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1E6781E7-E597-41A7-884E-3A6865D73DB5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build files", "build files", "{1E6781E7-E597-41A7-884E-3A6865D73DB5}"
+	ProjectSection(SolutionItems) = preProject
+		AltNerdDinner.build = AltNerdDinner.build
+		common-targets.build = common-targets.build
+		go.bat = go.bat
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdDinner", "src\NerdDinner\NerdDinner.csproj", "{328C148C-DBEE-41A4-B1C7-104CBB216556}"
 EndProject
