@@ -4,16 +4,16 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NerdDinner;
 using NerdDinner.Controllers;
 
 namespace NerdDinner.Tests.Controllers {
 
-    [TestClass]
+    [TestFixture]
     public class AccountControllerTest {
 
-        [TestMethod]
+        [Test]
         public void ChangePasswordGetReturnsView() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -25,7 +25,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual(6, result.ViewData["PasswordLength"]);
         }
 
-        [TestMethod]
+        [Test]
         public void ChangePasswordPostRedirectsOnSuccess() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -37,7 +37,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("ChangePasswordSuccess", result.RouteValues["action"]);
         }
 
-        [TestMethod]
+        [Test]
         public void ChangePasswordPostReturnsViewIfCurrentPasswordNotSpecified() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -50,7 +50,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("You must specify a current password.", result.ViewData.ModelState["currentPassword"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void ChangePasswordPostReturnsViewIfNewPasswordDoesNotMatchConfirmPassword() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -63,7 +63,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("The new password and confirmation password do not match.", result.ViewData.ModelState["_FORM"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void ChangePasswordPostReturnsViewIfNewPasswordIsNull() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -76,7 +76,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("You must specify a new password of 6 or more characters.", result.ViewData.ModelState["newPassword"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void ChangePasswordPostReturnsViewIfNewPasswordIsTooShort() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -89,7 +89,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("You must specify a new password of 6 or more characters.", result.ViewData.ModelState["newPassword"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void ChangePasswordPostReturnsViewIfProviderRejectsPassword() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -102,7 +102,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("The current password is incorrect or the new password is invalid.", result.ViewData.ModelState["_FORM"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void ChangePasswordSuccess() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -114,7 +114,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.IsNotNull(result);
         }
 
-        [TestMethod]
+        [Test]
         public void ConstructorSetsProperties() {
             // Arrange
             IFormsAuthentication formsAuth = new MockFormsAuthenticationService();
@@ -128,7 +128,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual(membershipService, controller.MembershipService, "MembershipService property did not match.");
         }
 
-        [TestMethod]
+        [Test]
         public void ConstructorSetsPropertiesToDefaultValues() {
             // Act
             AccountController controller = new AccountController();
@@ -138,7 +138,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.IsNotNull(controller.MembershipService, "MembershipService property is null.");
         }
 
-        [TestMethod]
+        [Test]
         public void LoginGet() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -150,7 +150,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.IsNotNull(result);
         }
 
-        [TestMethod]
+        [Test]
         public void LoginPostRedirectsHomeIfLoginSuccessfulButNoReturnUrlGiven() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -163,7 +163,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("Index", result.RouteValues["action"]);
         }
 
-        [TestMethod]
+        [Test]
         public void LoginPostRedirectsToReturnUrlIfLoginSuccessfulAndReturnUrlGiven() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -175,7 +175,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("someUrl", result.Url);
         }
 
-        [TestMethod]
+        [Test]
         public void LoginPostReturnsViewIfPasswordNotSpecified() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -188,7 +188,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("You must specify a password.", result.ViewData.ModelState["password"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void LoginPostReturnsViewIfUsernameNotSpecified() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -201,7 +201,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("You must specify a username.", result.ViewData.ModelState["username"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void LoginPostReturnsViewIfUsernameOrPasswordIsIncorrect() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -214,7 +214,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("The username or password provided is incorrect.", result.ViewData.ModelState["_FORM"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void LogOff() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -227,7 +227,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("Index", result.RouteValues["action"]);
         }
 
-        [TestMethod]
+        [Test]
         public void RegisterGet() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -239,7 +239,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual(6, result.ViewData["PasswordLength"]);
         }
 
-        [TestMethod]
+        [Test]
         public void RegisterPostRedirectsHomeIfRegistrationSuccessful() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -252,7 +252,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("Index", result.RouteValues["action"]);
         }
 
-        [TestMethod]
+        [Test]
         public void RegisterPostReturnsViewIfEmailNotSpecified() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -265,7 +265,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("You must specify an email address.", result.ViewData.ModelState["email"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void RegisterPostReturnsViewIfNewPasswordDoesNotMatchConfirmPassword() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -278,7 +278,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("The new password and confirmation password do not match.", result.ViewData.ModelState["_FORM"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void RegisterPostReturnsViewIfPasswordIsNull() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -291,7 +291,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("You must specify a password of 6 or more characters.", result.ViewData.ModelState["password"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void RegisterPostReturnsViewIfPasswordIsTooShort() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -304,7 +304,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("You must specify a password of 6 or more characters.", result.ViewData.ModelState["password"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void RegisterPostReturnsViewIfRegistrationFails() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -317,7 +317,7 @@ namespace NerdDinner.Tests.Controllers {
             Assert.AreEqual("Username already exists. Please enter a different user name.", result.ViewData.ModelState["_FORM"].Errors[0].ErrorMessage);
         }
 
-        [TestMethod]
+        [Test]
         public void RegisterPostReturnsViewIfUsernameNotSpecified() {
             // Arrange
             AccountController controller = GetAccountController();

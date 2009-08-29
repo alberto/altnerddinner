@@ -1,27 +1,36 @@
 <?xml version="1.0" ?>
 
-<!--EXTERNAL_PROPERTIES: file.solution;file.project;dir.pub.bin;dir.pub-->
+<!--EXTERNAL_PROPERTIES: file.solution;file.project;dir.pub.bin;dir.pub;test.assembly-->
 <project name="tareas-comunes">
 	<property name="msbuild" value="${framework::get-framework-directory(framework::get-target-framework())}\msbuild.exe" />
 	
-	<target name="common.build">
-		<property name="msbuild.targets" value="build" />
+	<target name="common.compile">
+    <property name="msbuild.targets" value="clean;rebuild" />
 
-		<exec program="${msbuild}"
-			  commandline="${file.solution} /t:${msbuild.targets}" 
+    <exec program="${msbuild}"
+			  commandline="${file.solution} /t:${msbuild.targets} /v:m" 
 			  workingdir="." />
 	</target>
-	
-	<target name="common.rebuild">
-		<property name="msbuild.targets" value="clean;rebuild" />
-		<call target="common.build" />
-	</target>
 
-	<target name="comun.publicar">
+	<target name="common.publish">
 		<exec program="${msbuild}"
 			  commandline="${file.project} /t:ResolveReferences;_CopyWebApplication
 				/p:OutDir=${dir.pub.bin}
 				/p:WebProjectOutputDir=${dir.pub}"
 			  workingdir="." />
 	</target>
+
+  <target name="common.test">
+     <property name="project.name" value="${project::get-name()}" overwrite="false" />
+     <exec program="${exe.nunit}" workingdir=".">
+       <arg path="./${test.dir}/${test.assembly}" />
+       <arg value="/xml:${dir.root}/build/${test.assembly}-testresults.xml" />
+       <arg value="/noshadow" />
+       <arg value="/nologo" />
+       <arg value="/nothread" />
+       <arg value="/domain=Multiple" />
+       <arg value="/process=Single" />
+       <arg value="/framework=${nant.settings.currentframework}" />
+     </exec>
+  </target>
 </project>

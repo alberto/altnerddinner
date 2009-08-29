@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NerdDinner.Controllers;
 using System.Web.Mvc;
 using NerdDinner.Models;
@@ -13,7 +13,7 @@ using System.Web.Routing;
 
 namespace NerdDinner.Tests.Controllers {
  
-    [TestClass]
+    [TestFixture]
     public class SearchControllerTest {
 
         SearchController CreateSearchController() {
@@ -23,7 +23,7 @@ namespace NerdDinner.Tests.Controllers {
             return new SearchController(repository);
         }
 
-        [TestMethod]
+        [Test]
         public void SearchByLocationAction_Should_Return_Json()
         {
 
@@ -34,10 +34,10 @@ namespace NerdDinner.Tests.Controllers {
             var result = controller.SearchByLocation(99, -99);
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(JsonResult));
+            Assert.IsInstanceOf(typeof(JsonResult), result);
         }
 
-        [TestMethod]
+        [Test]
         public void SearchByLocationAction_Should_Return_JsonDinners()
         {
 
@@ -48,7 +48,7 @@ namespace NerdDinner.Tests.Controllers {
             var result = (JsonResult)controller.SearchByLocation(99, -99);
 
             // Assert
-            Assert.IsInstanceOfType(result.Data, typeof(List<JsonDinner>));
+            Assert.IsInstanceOf(typeof(List<JsonDinner>), result.Data);
             var dinners = (List<JsonDinner>)result.Data;
             Assert.AreEqual(101, dinners.Count);
         }

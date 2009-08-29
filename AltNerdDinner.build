@@ -1,9 +1,13 @@
 <?xml version="1.0" ?>
-<project name="AltNerdDinner" default="build">
+<project name="AltNerdDinner" default="compile">
 	<property name="dir.root" value="." />
 	<include buildfile="${dir.root}/common-targets.build" />
 	<property name="file.solution" 	value="${dir.root}/NerdDinner.sln" />
-
-	<target name="build" 	depends="common.build" />
-	<target name="rebuild" 	depends="common.rebuild" />	
+  <property name="test.assembly" value="NerdDinner.Tests.dll" />
+  <property name="exe.nunit" value="${dir.root}/tools/nunit/nunit-console-x86.exe" />
+  <property name="test.dir" value="${dir.root}/src/NerdDinner.Tests/bin/Debug/" />
+  
+	<target name="compile" 	depends="common.compile" />
+	  
+  <target name="test" depends="compile, common.test" />
 </project>
