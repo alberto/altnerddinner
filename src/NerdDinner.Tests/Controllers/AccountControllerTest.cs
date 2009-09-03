@@ -118,7 +118,7 @@ namespace NerdDinner.Tests.Controllers {
         public void ConstructorSetsProperties() {
             // Arrange
             IFormsAuthentication formsAuth = new MockFormsAuthenticationService();
-            IMembershipService membershipService = new AccountMembershipService();
+            IMembershipService membershipService = new FakeMembershipService();
 
             // Act
             AccountController controller = new AccountController(formsAuth, membershipService);
@@ -333,7 +333,7 @@ namespace NerdDinner.Tests.Controllers {
         private static AccountController GetAccountController() {
             IFormsAuthentication formsAuth = new MockFormsAuthenticationService();
             MembershipProvider membershipProvider = new MockMembershipProvider();
-            AccountMembershipService membershipService = new AccountMembershipService(membershipProvider);
+            FakeMembershipService membershipService = new FakeMembershipService();
             AccountController controller = new AccountController(formsAuth, membershipService);
             ControllerContext controllerContext = new ControllerContext(new MockHttpContext(), new RouteData(), controller);
             controller.ControllerContext = controllerContext;
