@@ -266,7 +266,7 @@ namespace NerdDinner.Controllers {
     {
         public int MinPasswordLength
         {
-            get { return 0; }
+            get { return 6; }
         }
 
         public bool ValidateUser(string userName, string password)
