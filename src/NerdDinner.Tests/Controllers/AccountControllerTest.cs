@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using Moq;
 using NUnit.Framework;
 using NerdDinner;
 using NerdDinner.Controllers;
@@ -92,7 +93,10 @@ namespace NerdDinner.Tests.Controllers {
         [Test]
         public void ChangePasswordPostReturnsViewIfProviderRejectsPassword() {
             // Arrange
-            AccountController controller = GetAccountController();
+            var membershipProvider = new Mock<IMembershipService>();
+            membershipProvider.Setup(
+                    m => m.ChangePassword(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(false);
+            AccountController controller = new AccountController(new MockFormsAuthenticationService(), null);
 
             // Act
             ViewResult result = (ViewResult)controller.ChangePassword("oldPass", "badPass", "badPass");
@@ -204,7 +208,9 @@ namespace NerdDinner.Tests.Controllers {
         [Test]
         public void LoginPostReturnsViewIfUsernameOrPasswordIsIncorrect() {
             // Arrange
-            AccountController controller = GetAccountController();
+            var membershipService = new Mock<IMembershipService>();
+            membershipService.Setup(m => m.ValidateUser("someUser", "badPass")).Returns(false);
+            AccountController controller = new AccountController(new MockFormsAuthenticationService(), membershipService.Object);
 
             // Act
             ViewResult result = (ViewResult)controller.LogOn("someUser", "badPass", true, null);
@@ -307,13 +313,14 @@ namespace NerdDinner.Tests.Controllers {
         [Test]
         public void RegisterPostReturnsViewIfRegistrationFails() {
             // Arrange
-            AccountController controller = GetAccountController();
+            var memebershipService = new Mock<IMembershipService>();
+            memebershipService.Setup(m => m.CreateUser("someUser", "badPass", "DuplicateUserName")).Returns(MembershipCreateStatus.DuplicateUserName);
+            AccountController controller = new AccountController(new MockFormsAuthenticationService(), memebershipService.Object);
 
             // Act
             ViewResult result = (ViewResult)controller.Register("someUser", "DuplicateUserName" /* error */, "badPass", "badPass");
 
             // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
             Assert.AreEqual("Username already exists. Please enter a different user name.", result.ViewData.ModelState["_FORM"].Errors[0].ErrorMessage);
         }
 
