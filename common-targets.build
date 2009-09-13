@@ -1,29 +1,37 @@
 <?xml version="1.0" ?>
 
-<!--EXTERNAL_PROPERTIES: file.solution;file.project;dir.pub.bin;dir.pub;test.assembly-->
-<project name="tareas-comunes">
+<!--EXTERNAL_PROPERTIES: file.solution;file.project;dir.pub.bin;dir.pub;test.assembly;dir.build-->
+<project name="common-targets">	
 	<property name="msbuild" value="${framework::get-framework-directory(framework::get-target-framework())}\msbuild.exe" />
-	
-	<target name="common.compile">
-    <property name="msbuild.targets" value="clean;rebuild" />
 
-    <exec program="${msbuild}"
-			  commandline="${file.solution} /t:${msbuild.targets} /v:m" 
-			  workingdir="." />
+  <target name="common.clean">
+    <delete dir="${dir.build}" />  
+  </target>
+
+  <target name="common.init">
+    <mkdir dir="${dir.build}" />
+  </target>
+  
+	<target name="common.compile">
+		<property name="msbuild.targets" value="clean;rebuild" />
+		
+		<exec program="${msbuild}"
+				  commandline="${file.solution} /t:${msbuild.targets} /v:m" 
+				  workingdir="." />
 	</target>
 
 	<target name="common.publish">
 		<exec program="${msbuild}"
 			  commandline="${file.project} /t:ResolveReferences;_CopyWebApplication
-				/p:OutDir=${dir.pub.bin}
-				/p:WebProjectOutputDir=${dir.pub}"
+        				/p:WebProjectOutputDir=${dir.pub}
+        				/p:OutDir=${dir.pub.bin}"
 			  workingdir="." />
 	</target>
 
   <target name="common.test">
      <property name="project.name" value="${project::get-name()}" overwrite="false" />
-     <exec program="${exe.nunit}" workingdir=".">
-       <arg path="./${test.dir}/${test.assembly}" />
+     <exec program="${exe.nunit}">
+       <arg path="${test.dir}/${test.assembly}" />
        <arg value="/xml:${dir.root}/build/${test.assembly}-testresults.xml" />
        <arg value="/noshadow" />
        <arg value="/nologo" />

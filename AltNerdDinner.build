@@ -1,13 +1,21 @@
 <?xml version="1.0" ?>
 <project name="AltNerdDinner" default="compile">
-	<property name="dir.root" value="." />
+	<property name="dir.root" value="${path::get-full-path('.')}" />
 	<include buildfile="${dir.root}/common-targets.build" />
 	<property name="file.solution" 	value="${dir.root}/NerdDinner.sln" />
-  <property name="test.assembly" value="NerdDinner.Tests.dll" />
-  <property name="exe.nunit" value="${dir.root}/tools/nunit/nunit-console-x86.exe" />
-  <property name="test.dir" value="${dir.root}/src/NerdDinner.Tests/bin/Debug/" />
+	<property name="test.assembly" value="NerdDinner.Tests.dll" />
+	<property name="exe.nunit" value="${dir.root}/tools/nunit/nunit-console-x86.exe" />
+	<property name="test.dir" value="${dir.root}\src\NerdDinner.Tests\bin\Debug\" />
+  <property name="dir.build" value="${dir.root}/build" />
+  <property name="dir.pub" value="${dir.build}/AltNerdDinner" />
+  <property name="dir.pub.bin" value="${dir.pub}/bin/" />
+
+  <target name="compile" 	depends="common.compile" />
+
+  <target name="publish" depends="common.clean, common.init, compile, test">
+    <property name="file.project" value="${dir.root}/src/NerdDinner/NerdDinner.csproj" />
+    <call target="common.publish" />
+  </target>
   
-	<target name="compile" 	depends="common.compile" />
-	  
-  <target name="test" depends="compile, common.test" />
+	<target name="test" depends="compile, common.test" />
 </project>
