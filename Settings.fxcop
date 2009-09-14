@@ -1,0 +1,464 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.36" Name="My FxCop Project">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="True" />
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="Message Level" Deterministic="True" />
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+  <Spelling Locale="es" />
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+  <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
+  <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
+ </ProjectOptions>
+ <Targets>
+  <AssemblyReferenceDirectories>
+   <Directory>$(ProjectDir)/CAN.UserInterface/bin/Debug/</Directory>
+   <Directory>$(ProjectDir)/Libraries/</Directory>
+   <Directory>$(ProjectDir)/Web/Bin/</Directory>
+  </AssemblyReferenceDirectories>
+  <Target Name="$(ProjectDir)/build/published/bin/NerdDinner.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" />
+  </RuleFiles>
+  <Groups>
+   <Group Name="Message Level" IsSystem="True" Selected="True">
+    <Categories>
+     <Category Name="Critical Error" AllRulesEnabled="True" />
+     <Category Name="Critical Warning" AllRulesEnabled="True" />
+     <Category Name="Error" AllRulesEnabled="True" />
+     <Category Name="Information">
+      <Rules />
+     </Category>
+     <Category Name="Warning" AllRulesEnabled="True" />
+    </Categories>
+   </Group>
+  </Groups>
+  <Settings />
+ </Rules>
+ <FxCopReport Version="1.36">
+  <Namespaces>
+   <Namespace Name="NerdDinner">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2009-09-14 00:25:37Z">
+      <Issue>
+       <Item>NerdDinner</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="NerdDinner.Helpers">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2009-09-14 00:25:37Z">
+      <Issue>
+       <Item>NerdDinner.Helpers</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+  </Namespaces>
+  <Targets>
+   <Target Name="$(ProjectDir)/build/published/bin/NerdDinner.dll">
+    <Modules>
+     <Module Name="nerddinner.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2009-09-14 00:25:37Z">
+        <Issue Name="NoStrongName">
+         <Item>'NerdDinner.dll'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2009-09-14 00:25:37Z">
+        <Issue>
+         <Item>'NerdDinner.dll'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="NerdDinner">
+        <Types>
+         <Type Name="_Default">
+          <Messages>
+           <Message TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707" Created="2009-09-14 00:25:37Z">
+            <Issue Name="Type">
+             <Item>'_Default'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="MvcApplication">
+          <Members>
+           <Member Name="#Application_Start()">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2009-09-14 00:25:37Z">
+              <Issue>
+               <Item>'MvcApplication.Application_Start()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RegisterRoutes(System.Web.Routing.RouteCollection)">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2009-09-14 00:25:37Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'MvcApplication.RegisterRoutes(RouteCollection)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="NerdDinner.Controllers">
+        <Types>
+         <Type Name="AccountController">
+          <Members>
+           <Member Name="#ChangePassword(System.String,System.String,System.String)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2009-09-14 00:25:37Z">
+              <Issue>
+               <Item>'AccountController.ChangePassword(string, string, string)'</Item>
+               <Item>'object'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#LogOn(System.String,System.String,System.Boolean,System.String)">
+            <Messages>
+             <Message Id="3#" TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054" Created="2009-09-14 00:25:37Z">
+              <Issue>
+               <Item>'returnUrl'</Item>
+               <Item>'AccountController.LogOn(string, string, bool, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DinnersController">
+          <Members>
+           <Member Name="#Create(NerdDinner.Models.Dinner)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2009-09-14 00:25:37Z">
+              <Issue>
+               <Item>'DinnersController.Create(Dinner)'</Item>
+               <Item>'object'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Delete(System.Int32,System.String)">
+            <Messages>
+             <Message Id="confirmButton" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2009-09-14 00:25:37Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'confirmButton'</Item>
+               <Item>'DinnersController.Delete(int, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Edit(System.Int32,System.Web.Mvc.FormCollection)">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2009-09-14 00:25:37Z">
+              <Issue>
+               <Item>'DinnersController.Edit(int, FormCollection)'</Item>
+               <Item>'object'</Item>
+              </Issue>
+             </Message>
+             <Message Id="collection" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2009-09-14 00:25:37Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'collection'</Item>
+               <Item>'DinnersController.Edit(int, FormCollection)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="JsonDinner">
+          <Members>
+           <Member Name="#DinnerID">
+            <Messages>
+             <Message Id="ID" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2009-09-14 00:25:37Z">
+              <Issue Name="MemberAbbreviation">
+               <Item>ID</Item>
+               <Item>'JsonDinner.DinnerID'</Item>
+               <Item>Id</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RSVPCount">
+            <Messages>
+             <Message Id="RSVP" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2009-09-14 00:25:37Z">
+              <Issue Name="Member">
+               <Item>RSVP</Item>
+               <Item>'JsonDinner.RSVPCount'</Item>
+               <Item>Rsvp</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="RSVPController">
+          <Messages>
+           <Message Id="RSVP" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2009-09-14 00:25:37Z">
+            <Issue Name="Type">
+             <Item>RSVP</Item>
+             <Item>'RSVPController'</Item>
+             <Item>Rsvp</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="NerdDinner.Helpers">
+        <Types>
+         <Type Name="PhoneValidator">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053" Created="2009-09-14 00:25:37Z">
+            <Issue>
+             <Item>'PhoneValidator'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="NerdDinner.Models">
+        <Types>
+         <Type Name="Dinner">
+          <Members>
+           <Member Name="#DinnerID">
+            <Messages>
+             <Message Id="ID" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2009-09-14 00:25:37Z">
+              <Issue Name="MemberAbbreviation">
+               <Item>ID</Item>
+               <Item>'Dinner.DinnerID'</Item>
+               <Item>Id</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetRuleViolations()">
+            <Messages>
+             <Message TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024" Created="2009-09-14 00:25:37Z">
+              <Issue Certainty="50">
+               <Item>'Dinner.GetRuleViolations()'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsHostedBy(System.String)">
+            <Messages>
+             <Message Id="System.String.Equals(System.String,System.StringComparison)" TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309" Created="2009-09-14 00:25:37Z">
+              <Issue Name="StringComparison">
+               <Item>'Dinner.IsHostedBy(string)'</Item>
+               <Item>StringComparison.InvariantCultureIgnoreCase</Item>
+               <Item>'string.Equals(string, StringComparison)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsUserRegistered(System.String)">
+            <Messages>
+             <Message Id="System.String.Equals(System.String,System.StringComparison)" TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309" Created="2009-09-14 00:25:37Z">
+              <Issue Name="StringComparison">
+               <Item>'Dinner.IsUserRegistered(string)'</Item>
+               <Item>StringComparison.InvariantCultureIgnoreCase</Item>
+               <Item>'string.Equals(string, StringComparison)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#OnValidate(System.Data.Linq.ChangeAction)">
+            <Messages>
+             <Message TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201" Created="2009-09-14 00:25:37Z">
+              <Issue Name="TooGeneric">
+               <Item>'Dinner.OnValidate(ChangeAction)'</Item>
+               <Item>'ApplicationException'</Item>
+              </Issue>
+             </Message>
+             <Message Id="action" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2009-09-14 00:25:37Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'action'</Item>
+               <Item>'Dinner.OnValidate(ChangeAction)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RSVPs">
+            <Messages>
+             <Message TypeName="CollectionPropertiesShouldBeReadOnly" Category="Microsoft.Usage" CheckId="CA2227" Created="2009-09-14 00:25:37Z">
+              <Issue>
+               <Item>'Dinner.RSVPs'</Item>
+              </Issue>
+             </Message>
+             <Message Id="RSVPs" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2009-09-14 00:25:37Z">
+              <Issue Name="Member">
+               <Item>RSVPs</Item>
+               <Item>'Dinner.RSVPs'</Item>
+               <Item>Rsvps</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="DinnerRepository">
+          <Messages>
+           <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Created="2009-09-14 00:25:37Z" FixCategory="DependsOnFix">
+            <Issue Name="DependsOnFix">
+             <Item>'DinnerRepository'</Item>
+             <Item>'NerdDinnerDataContext'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="NearestDinnersResult">
+          <Members>
+           <Member Name="#DinnerID">
+            <Messages>
+             <Message Id="ID" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2009-09-14 00:25:37Z">
+              <Issue Name="MemberAbbreviation">
+               <Item>ID</Item>
+               <Item>'NearestDinnersResult.DinnerID'</Item>
+               <Item>Id</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="NerdDinnerDataContext">
+          <Members>
+           <Member Name="#RSVPs">
+            <Messages>
+             <Message Id="RSVPs" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2009-09-14 00:25:37Z">
+              <Issue Name="Member">
+               <Item>RSVPs</Item>
+               <Item>'NerdDinnerDataContext.RSVPs'</Item>
+               <Item>Rsvps</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="RSVP">
+          <Messages>
+           <Message Id="RSVP" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2009-09-14 00:25:37Z">
+            <Issue Name="Type">
+             <Item>RSVP</Item>
+             <Item>'RSVP'</Item>
+             <Item>Rsvp</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#DinnerID">
+            <Messages>
+             <Message Id="ID" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2009-09-14 00:25:37Z">
+              <Issue Name="MemberAbbreviation">
+               <Item>ID</Item>
+               <Item>'RSVP.DinnerID'</Item>
+               <Item>Id</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RsvpID">
+            <Messages>
+             <Message Id="ID" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2009-09-14 00:25:37Z">
+              <Issue Name="MemberAbbreviation">
+               <Item>ID</Item>
+               <Item>'RSVP.RsvpID'</Item>
+               <Item>Id</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Rules>
+   <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+    <Resolution Name="NoStrongName">Sign {0} with a strong name key.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
+    <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811">
+    <Resolution Name="Default">{0} appears to have no upstream public or protected callers.</Resolution>
+   </Rule>
+   <Rule TypeName="CollectionPropertiesShouldBeReadOnly" Category="Microsoft.Usage" CheckId="CA2227">
+    <Resolution Name="Default">Change {0} to be read-only by removing the property setter.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031">
+    <Resolution Name="Default">Modify {0} to catch a more specific exception than {1} or rethrow the exception.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotRaiseReservedExceptionTypes" Category="Microsoft.Usage" CheckId="CA2201">
+    <Resolution Name="TooGeneric">{0} creates an exception of type {1}, an exception type that is not sufficiently specific and should never be raised by user code. If this exception instance might be thrown, use a different exception type.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Resolution Name="Member">Correct the casing of '{0}' in member name {1} by changing it to '{2}'.</Resolution>
+    <Resolution Name="MemberAbbreviation">Correct the casing of '{0}' in member name {1} by changing it to '{2}'. '{2}' is an abbreviation and therefore is not subject to acronym casing guidelines.</Resolution>
+    <Resolution Name="Type">Correct the casing of '{0}' in type name {1} by changing it to '{2}'.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldNotContainUnderscores" Category="Microsoft.Naming" CheckId="CA1707">
+    <Resolution Name="Type">Remove the underscores from type name {0}.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
+    <Resolution Name="Default">Mark {0} with CLSCompliant(true) because it exposes externally visible types.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
+    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
+   </Rule>
+   <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
+    <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
+   </Rule>
+   <Rule TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053">
+    <Resolution Name="Default">Remove the public constructors from {0}.</Resolution>
+   </Rule>
+   <Rule TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001">
+    <Resolution Name="DependsOnFix">Implement IDisposable on {0} because it creates members of the following IDisposable types: {1}. If {0} has previously shipped, adding new members that implement IDisposable to this type is considered a breaking change to existing consumers.</Resolution>
+   </Rule>
+   <Rule TypeName="UriParametersShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1054">
+    <Resolution Name="Default">Change the type of parameter {0} of method {1} from string to System.Uri, or provide an overload of {1}, that allows {0} to be passed as a System.Uri object.</Resolution>
+   </Rule>
+   <Rule TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309">
+    <Resolution Name="StringComparison">{0} passes {1} as an argument to {2}. Replace this usage with StringComparison.Ordinal or StringComparison.OrdinalIgnoreCase if appropriate.</Resolution>
+   </Rule>
+   <Rule TypeName="UsePropertiesWhereAppropriate" Category="Microsoft.Design" CheckId="CA1024">
+    <Resolution Name="Default">Change {0} to a property if appropriate.</Resolution>
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>

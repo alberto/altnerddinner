@@ -88,13 +88,15 @@
     <Compile Include="Helpers\PaginatedList.cs" />
     <Compile Include="Helpers\PhoneValidator.cs" />
     <Compile Include="Models\Dinner.cs" />
-    <Compile Include="Models\DinnerRepository.cs" />
+    <Compile Include="Models\DinnerRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Models\IDinnerRepository.cs" />
     <Compile Include="Models\InMemoryDinnerRepository.cs" />
     <Compile Include="Models\NerdDinner.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>NerdDinner.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Models\RuleViolation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -138,22 +140,17 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models\NerdDinner.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>NerdDinner.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Models\NerdDinner.dbml">
+      <SubType>Designer</SubType>
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>NerdDinner.designer.cs</LastGenOutput>
+    </None>
     <None Include="Models\NerdDinner.dbml.layout">
       <DependentUpon>NerdDinner.dbml</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" />

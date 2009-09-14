@@ -3,19 +3,34 @@
 	<property name="dir.root" value="${path::get-full-path('.')}" />
 	<include buildfile="${dir.root}/common-targets.build" />
 	<property name="file.solution" 	value="${dir.root}/NerdDinner.sln" />
-	<property name="test.assembly" value="NerdDinner.Tests.dll" />
-	<property name="exe.nunit" value="${dir.root}/tools/nunit/nunit-console-x86.exe" />
-	<property name="test.dir" value="${dir.root}\src\NerdDinner.Tests\bin\Debug\" />
+	<property name="assembly.tests" value="NerdDinner.Tests.dll" />
+  <property name="dir.tools" value="${dir.root}/tools" />
+	<property name="exe.nunit" value="${dir.tools}/nunit/nunit-console-x86.exe" />
   <property name="dir.build" value="${dir.root}/build" />
-  <property name="dir.pub" value="${dir.build}/AltNerdDinner" />
+  <property name="dir.tests" value="${dir.build}/tests/" />
+  <property name="dir.results" value="${dir.build}/results/" />
+  <property name="dir.tests.bin" value="${dir.build}/tests/bin/" />
+  <property name="dir.pub" value="${dir.build}/published" />
   <property name="dir.pub.bin" value="${dir.pub}/bin/" />
+  <property name="dir.prefix" value="foo" />
 
-  <target name="compile" 	depends="common.compile" />
+  <target name="compile" 	depends="common.clean, common.init">
+    <property name="dir.out" value="${dir.tests}" />
+    <property name="dir.out.bin" value="${dir.tests.bin}" />
+    <call target="common.compile" /> 
+  </target>
 
   <target name="publish" depends="common.clean, common.init, compile, test">
     <property name="file.project" value="${dir.root}/src/NerdDinner/NerdDinner.csproj" />
+    <property name="dir.out" value="${dir.pub}" />
+    <property name="dir.out.bin" value="${dir.pub.bin}" />
     <call target="common.publish" />
   </target>
-  
-	<target name="test" depends="compile, common.test" />
+
+  <target name="test" depends="compile, common.test" />
+  <target name="zip" depends="publish, common.zip" />
+  <target name="analyze" depends="publish, common.fxcop, common.stylecop" />
+
+  <target name="build" depends="publish, analyze" />
+  <target name="build-full" depends="publish, analyze, zip" />
 </project>

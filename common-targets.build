@@ -1,38 +1,49 @@
 <?xml version="1.0" ?>
 
-<!--EXTERNAL_PROPERTIES: file.solution;file.project;dir.pub.bin;dir.pub;test.assembly;dir.build-->
-<project name="common-targets">	
-	<property name="msbuild" value="${framework::get-framework-directory(framework::get-target-framework())}\msbuild.exe" />
+<!--EXTERNAL_PROPERTIES: file.solution;file.project;dir.out.bin;dir.out;test.assembly;dir.build;-->
+<project name="common-targets">
+  <loadtasks assembly=".\tools\stylecopcmd\StyleCopCmd.Core.dll"/>
+  <!--<loadtasks assembly=".\tools\ncover\NCoverExplorer.NAntTasks.dll" />
+  <loadtasks assembly=".\tools\ndepend\nant\NDepend.Build.NAntTasks.dll" />-->
+
+  <property name="msbuild" value="${framework::get-framework-directory(framework::get-target-framework())}\msbuild.exe" />
 
   <target name="common.clean">
-    <delete dir="${dir.build}" />  
+    <delete dir="${dir.build}" if="${directory::exists(dir.build)}" />  
   </target>
 
   <target name="common.init">
     <mkdir dir="${dir.build}" />
+    <mkdir dir="${dir.tests}" />
+    <mkdir dir="${dir.results}" />
+    <tstamp>
+      <formatter property="date" pattern="yyyyMMdd-HHmm" />
+    </tstamp>  
   </target>
   
 	<target name="common.compile">
 		<property name="msbuild.targets" value="clean;rebuild" />
 		
 		<exec program="${msbuild}"
-				  commandline="${file.solution} /t:${msbuild.targets} /v:m" 
+				  commandline="${file.solution} /t:${msbuild.targets} /v:m
+                  			/p:WebProjectOutputDir=${dir.out} 
+                        /p:OutDir=${dir.out.bin}"
 				  workingdir="." />
 	</target>
 
 	<target name="common.publish">
 		<exec program="${msbuild}"
 			  commandline="${file.project} /t:ResolveReferences;_CopyWebApplication
-        				/p:WebProjectOutputDir=${dir.pub}
-        				/p:OutDir=${dir.pub.bin}"
+        				/p:WebProjectOutputDir=${dir.out}
+        				/p:OutDir=${dir.out.bin}"
 			  workingdir="." />
 	</target>
 
   <target name="common.test">
      <property name="project.name" value="${project::get-name()}" overwrite="false" />
      <exec program="${exe.nunit}">
-       <arg path="${test.dir}/${test.assembly}" />
-       <arg value="/xml:${dir.root}/build/${test.assembly}-testresults.xml" />
+       <arg path="${dir.tests.bin}/${assembly.tests}" />
+       <arg value="/xml:${dir.results}/TestResults.xml" />
        <arg value="/noshadow" />
        <arg value="/nologo" />
        <arg value="/nothread" />
@@ -41,4 +52,49 @@
        <arg value="/framework=${nant.settings.currentframework}" />
      </exec>
   </target>
+
+  <target name="common.zip">
+    <property name="env" value="" overwrite="false" /> 
+    <property name="file.zipname"
+				  value="${dir.pub}/${project::get-name()}-${env}-${date}.zip"
+				  overwrite="false"  />
+    <zip zipfile="${file.zipname}"
+			 includeemptydirs="true">
+      <fileset basedir="${dir.pub}">
+        <include name="**" />
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="common.stylecop">
+    <property name="file.stylecop.out" value="${dir.results}/StyleCopReport.xml" overwrite="false" />
+    <property name="dir.stylecopcmd" value="${dir.tools}/stylecopcmd/" />
+    <styleCopCmd outputXmlFile="${file.stylecop.out}"
+         transformFile="${dir.stylecopcmd}\StyleCopReport.xsl"
+         processorSymbols="RELEASE,CODE_ANALYSIS"
+         ignorePatterns="AssemblyInfo\.cs,GlobalSuppressions\.cs">
+      <solutionFiles>
+        <include name="${file.solution}" />
+      </solutionFiles>
+      <addinDirectories>
+        <include name="${dir.stylecopcmd}" />
+      </addinDirectories>
+    </styleCopCmd>
+  </target>
+
+  <target name="common.fxcop">
+    <property name="exe.fxcop" value="C:\Archivos de programa\Microsoft FxCop 1.36\fxcopcmd.exe" overwrite="false" />
+    <property name="file.fxcop.in" value="Settings.fxcop" overwrite="false" />
+    <property name="file.fxcop.out" value="${dir.results}/FxCopReport.xml" overwrite="false"  />
+    <exec program="${exe.fxcop}" basedir=".">
+      <arg value="/p:${file.fxcop.in}"/>
+      <arg value="/o:${file.fxcop.out}"/>
+    </exec>
+  </target>
+
+  <!--<target name="common.ndepend">
+    <exec program="${dir.tools}\ndepend\NDepend.Console.exe">
+      <arg value="${directory::get-current-directory()}\Settings.NDepend.xml" />
+    </exec>
+  </target>-->
 </project>
