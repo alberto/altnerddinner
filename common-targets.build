@@ -72,7 +72,8 @@
     <styleCopCmd outputXmlFile="${file.stylecop.out}"
          transformFile="${dir.stylecopcmd}\StyleCopReport.xsl"
          processorSymbols="RELEASE,CODE_ANALYSIS"
-         ignorePatterns="AssemblyInfo\.cs,GlobalSuppressions\.cs">
+         ignorePatterns="AssemblyInfo\.cs,GlobalSuppressions\.cs"
+         styleCopSettingsFile="${dir.root}/Settings.StyleCop">
       <solutionFiles>
         <include name="${file.solution}" />
       </solutionFiles>
@@ -82,14 +83,21 @@
     </styleCopCmd>
   </target>
 
+  <!-- 
+    Requires:
+      "exe.fxcop" default value="${dir.tools}/fxcop/fxcopcmd.exe"
+      "file.fxcop.in" default value="${dir.root}/Settings.fxcop"
+      "file.fxcop.out" default value="${dir.results}/FxCopReport.xml" 
+  -->
   <target name="common.fxcop">
-    <property name="exe.fxcop" value="C:\Archivos de programa\Microsoft FxCop 1.36\fxcopcmd.exe" overwrite="false" />
-    <property name="file.fxcop.in" value="Settings.fxcop" overwrite="false" />
-    <property name="file.fxcop.out" value="${dir.results}/FxCopReport.xml" overwrite="false"  />
-    <exec program="${exe.fxcop}" basedir=".">
+    <property name="exe.fxcop" value="${dir.tools}/fxcop/fxcopcmd.exe" overwrite="false" />
+    <property name="file.fxcop.in" value="${dir.root}/Settings.fxcop" overwrite="false" />
+    <property name="file.fxcop.out" value="${dir.results}FxCopReport.xml" overwrite="false"  />
+    <exec program="${exe.fxcop}">
       <arg value="/p:${file.fxcop.in}"/>
       <arg value="/o:${file.fxcop.out}"/>
     </exec>
+    <echo message="##teamcity[importData type='FxCop' path='${file.fxcop.out}']" />
   </target>
 
   <!--<target name="common.ndepend">
