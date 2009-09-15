@@ -30,7 +30,7 @@
 
   <target name="test" depends="compile, common.test" />
   <target name="zip" depends="publish, common.zip" />
-  <target name="analyze" depends="publish, common.fxcop, common.stylecop, common.ndepend" />
+  <target name="analyze" depends="publish, common.stylecop, common.ndepend" />
 
   <target name="build" depends="publish, analyze" />
   <target name="build-full" depends="publish, analyze, zip" />
