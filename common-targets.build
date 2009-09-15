@@ -3,8 +3,7 @@
 <!--EXTERNAL_PROPERTIES: file.solution;file.project;dir.out.bin;dir.out;test.assembly;dir.build;-->
 <project name="common-targets">
   <loadtasks assembly=".\tools\stylecopcmd\StyleCopCmd.Core.dll"/>
-  <!--<loadtasks assembly=".\tools\ncover\NCoverExplorer.NAntTasks.dll" />
-  <loadtasks assembly=".\tools\ndepend\nant\NDepend.Build.NAntTasks.dll" />-->
+  <!--<loadtasks assembly=".\tools\ncover\NCoverExplorer.NAntTasks.dll" />-->
 
   <property name="msbuild" value="${framework::get-framework-directory(framework::get-target-framework())}\msbuild.exe" />
 
@@ -66,6 +65,41 @@
     </zip>
   </target>
 
+  <target name="common.coverage">
+    <ncover
+      assemblyList="{dir.tests.bin}/${assembly.tests}"
+      coverageFile="${dir.results}\CoverageReport.xml"
+      program="${dir.tools}\ncover\NCover.Console.exe"
+      commandLineExe="${dir.tools}\nant\nant.exe"
+      commandLineArgs="-buildfile:${nant.testtarget}"
+      >
+    </ncover>
+
+    <ncoverexplorer program="${dir.tools}\ncover\ncoverexplorer.console.exe"
+                        projectName="${project::get-name()}"
+                        outputDir="${dir.results}"
+                        satisfactoryCoverage="99"
+                        reportType="ModuleClassSummary"
+                        xmlReportName="CoverageSummary.xml"
+                        htmlReportName="CoverageSummary.html">
+      <fileset>
+        <include name="${dir.results}\CoverageReport.xml" />
+      </fileset>
+    </ncoverexplorer>
+  </target>
+
+
+  <target name="common.fxcop">
+    <property name="exe.fxcop" value="${dir.tools}/fxcop/fxcopcmd.exe" overwrite="false" />
+    <property name="file.fxcop.in" value="${dir.root}/Settings.fxcop" overwrite="false" />
+    <property name="file.fxcop.out" value="${dir.results}FxCopReport.xml" overwrite="false"  />
+    <exec program="${exe.fxcop}">
+      <arg value="/p:${file.fxcop.in}"/>
+      <arg value="/o:${file.fxcop.out}"/>
+    </exec>
+    <echo message="##teamcity[importData type='FxCop' path='${file.fxcop.out}']" />
+  </target>
+
   <target name="common.stylecop">
     <property name="file.stylecop.out" value="${dir.results}/StyleCopReport.xml" overwrite="false" />
     <property name="dir.stylecopcmd" value="${dir.tools}/stylecopcmd/" />
@@ -83,26 +117,9 @@
     </styleCopCmd>
   </target>
 
-  <!-- 
-    Requires:
-      "exe.fxcop" default value="${dir.tools}/fxcop/fxcopcmd.exe"
-      "file.fxcop.in" default value="${dir.root}/Settings.fxcop"
-      "file.fxcop.out" default value="${dir.results}/FxCopReport.xml" 
-  -->
-  <target name="common.fxcop">
-    <property name="exe.fxcop" value="${dir.tools}/fxcop/fxcopcmd.exe" overwrite="false" />
-    <property name="file.fxcop.in" value="${dir.root}/Settings.fxcop" overwrite="false" />
-    <property name="file.fxcop.out" value="${dir.results}FxCopReport.xml" overwrite="false"  />
-    <exec program="${exe.fxcop}">
-      <arg value="/p:${file.fxcop.in}"/>
-      <arg value="/o:${file.fxcop.out}"/>
-    </exec>
-    <echo message="##teamcity[importData type='FxCop' path='${file.fxcop.out}']" />
-  </target>
-
-  <!--<target name="common.ndepend">
+  <target name="common.ndepend">
     <exec program="${dir.tools}\ndepend\NDepend.Console.exe">
-      <arg value="${directory::get-current-directory()}\Settings.NDepend.xml" />
+      <arg value="${dir.root}\Settings.NDepend.xml" />
     </exec>
-  </target>-->
+  </target>
 </project>

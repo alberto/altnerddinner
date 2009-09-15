@@ -13,6 +13,7 @@
   <property name="dir.pub" value="${dir.build}/published" />
   <property name="dir.pub.bin" value="${dir.pub}/bin/" />
   <property name="dir.prefix" value="foo" />
+  <property name="nant.testtarget" value="${dir.root}/AltNerdDinner.build test" />
 
   <target name="compile" 	depends="common.clean, common.init">
     <property name="dir.out" value="${dir.tests}" />
@@ -29,7 +30,7 @@
 
   <target name="test" depends="compile, common.test" />
   <target name="zip" depends="publish, common.zip" />
-  <target name="analyze" depends="publish, common.fxcop, common.stylecop" />
+  <target name="analyze" depends="publish, common.fxcop, common.stylecop, common.ndepend" />
 
   <target name="build" depends="publish, analyze" />
   <target name="build-full" depends="publish, analyze, zip" />
