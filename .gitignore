@@ -1,0 +1,10 @@
+Thumbs.db
+build
+*.obj
+*.user
+*.suo
+*.cache
+[Dd]ebug*/
+obj
+[Rr]elease*/
+_ReSharper*
