@@ -4,6 +4,7 @@ build
 *.user
 *.suo
 *.cache
+src/*/bin
 [Dd]ebug*/
 obj
 [Rr]elease*/
