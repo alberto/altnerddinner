@@ -1,10 +1,17 @@
 <?xml version="1.0" ?>
 
-<!--EXTERNAL_PROPERTIES: file.solution;file.project;dir.out.bin;dir.out;test.assembly;dir.build;-->
 <project name="common-targets">
   <loadtasks assembly=".\tools\stylecopcmd\StyleCopCmd.Core.dll"/>
-  <!--<loadtasks assembly=".\tools\ncover\NCoverExplorer.NAntTasks.dll" />-->
 
+  <property name="dir.root" value="${path::get-full-path('.')}" overwrite="false"  />
+  <property name="dir.tools" value="${dir.root}/tools" />
+  <property name="exe.nunit" value="${dir.tools}/nunit/nunit-console-x86.exe" />
+  <property name="dir.build" value="${dir.root}/build" />
+  <property name="dir.tests" value="${dir.build}/tests/" />
+  <property name="dir.results" value="${dir.build}/results/" />
+  <property name="dir.tests.bin" value="${dir.build}/tests/bin/" />
+  <property name="dir.pub" value="${dir.build}/published" />
+  <property name="dir.pub.bin" value="${dir.pub}/bin/" />
   <property name="msbuild" value="${framework::get-framework-directory(framework::get-target-framework())}\msbuild.exe" />
 
   <target name="common.clean">
@@ -22,7 +29,9 @@
   
 	<target name="common.compile">
 		<property name="msbuild.targets" value="clean;rebuild" />
-		
+    <property name="dir.out" value="${dir.tests}" />
+    <property name="dir.out.bin" value="${dir.tests.bin}" />
+    
 		<exec program="${msbuild}"
 				  commandline="${file.solution} /t:${msbuild.targets} /v:m
                   			/p:WebProjectOutputDir=${dir.out} 
@@ -31,6 +40,8 @@
 	</target>
 
 	<target name="common.publish">
+    <property name="dir.out" value="${dir.pub}" />
+    <property name="dir.out.bin" value="${dir.pub.bin}" />
 		<exec program="${msbuild}"
 			  commandline="${file.project} /t:ResolveReferences;_CopyWebApplication
         				/p:WebProjectOutputDir=${dir.out}
@@ -64,30 +75,6 @@
       </fileset>
     </zip>
   </target>
-
-  <target name="common.coverage">
-    <ncover
-      assemblyList="{dir.tests.bin}/${assembly.tests}"
-      coverageFile="${dir.results}\CoverageReport.xml"
-      program="${dir.tools}\ncover\NCover.Console.exe"
-      commandLineExe="${dir.tools}\nant\nant.exe"
-      commandLineArgs="-buildfile:${nant.testtarget}"
-      >
-    </ncover>
-
-    <ncoverexplorer program="${dir.tools}\ncover\ncoverexplorer.console.exe"
-                        projectName="${project::get-name()}"
-                        outputDir="${dir.results}"
-                        satisfactoryCoverage="99"
-                        reportType="ModuleClassSummary"
-                        xmlReportName="CoverageSummary.xml"
-                        htmlReportName="CoverageSummary.html">
-      <fileset>
-        <include name="${dir.results}\CoverageReport.xml" />
-      </fileset>
-    </ncoverexplorer>
-  </target>
-
 
   <target name="common.fxcop">
     <property name="exe.fxcop" value="${dir.tools}/fxcop/fxcopcmd.exe" overwrite="false" />
