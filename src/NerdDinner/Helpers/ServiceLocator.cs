@@ -5,17 +5,15 @@ namespace NerdDinner.Helpers
 {
     public static class ServiceLocator
     {
+        private static IDinnerRepository repository = new InMemoryDinnerRepository(
+                FakeDinnerData.CreateTestDinners());
+                                        
+
         private static IDictionary<object, object> _container =
                 new Dictionary<object, object>()
                 {
-                        {
-                                typeof(IDinnerRepository),
-                                new InMemoryDinnerRepository(
-                                FakeDinnerData.
-                                        CreateTestDinners())
-                                        },
+                        { typeof(IDinnerRepository), repository },
                 };
-
         
         public static T Resolve<T>()
         {

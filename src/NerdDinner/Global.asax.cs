@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace NerdDinner {
 
-    public class MvcApplication : System.Web.HttpApplication {
+    public class MvcApplication : System.Web.HttpApplication
+    {
 
-        public void RegisterRoutes(RouteCollection routes) {
+        public void RegisterRoutes(RouteCollection routes)
+        {
 
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                "UpcomingDinners", 
-                "Dinners/Page/{page}", 
+                "UpcomingDinners",
+                "Dinners/Page/{page}",
                 new { controller = "Dinners", action = "Index" }
             );
 
@@ -26,8 +30,17 @@ namespace NerdDinner {
             );
         }
 
-        void Application_Start() {
+        void Application_Start()
+        {
             RegisterRoutes(RouteTable.Routes);
+        }
+
+        protected void Application_BeginRequest(Object sender, EventArgs e)
+        {
+            string culturePref = "en-US"; // default culture
+            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(culturePref);
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+
         }
     }
 }

@@ -38,6 +38,7 @@ namespace NerdDinner.Models
 
         public void Add(Dinner dinner)
         {
+            dinner.DinnerID = _dinners.Count;
             _dinners.Add(dinner);
         }
 
