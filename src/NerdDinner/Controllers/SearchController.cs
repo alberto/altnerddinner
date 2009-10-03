@@ -20,13 +20,6 @@ namespace NerdDinner.Controllers {
 
         IDinnerRepository dinnerRepository;
 
-        //
-        // Dependency Injection enabled constructors
-
-        public SearchController()
-            : this(new DinnerRepository()) {
-        }
-
         public SearchController(IDinnerRepository repository) {
             dinnerRepository = repository;
         }

@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace NerdDinner.Models
 {
     public class InMemoryDinnerRepository : IDinnerRepository
     {
-        List<Dinner> _dinners = new List<Dinner>();
+        private readonly IList<Dinner> _dinners;
+
+        public InMemoryDinnerRepository(IList<Dinner> dinners)
+        {
+            _dinners = dinners;
+        }
+
         public IQueryable<Dinner> FindAllDinners()
         {
             return _dinners.AsQueryable();
@@ -43,6 +48,11 @@ namespace NerdDinner.Models
 
         public void Save()
         {
+            foreach (Dinner dinner in _dinners)
+            {
+                if (!dinner.IsValid)
+                    throw new ApplicationException("Rule violations");
+            }
         }
     }
 }

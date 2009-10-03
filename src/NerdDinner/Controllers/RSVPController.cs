@@ -11,13 +11,6 @@ namespace NerdDinner.Controllers
 
         IDinnerRepository dinnerRepository;
 
-        //
-        // Dependency Injection enabled constructors
-
-        public RSVPController()
-            : this(new DinnerRepository()) {
-        }
-
         public RSVPController(IDinnerRepository repository) {
             dinnerRepository = repository;
         }

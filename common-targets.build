@@ -35,7 +35,8 @@
 		<exec program="${msbuild}"
 				  commandline="${file.solution} /t:${msbuild.targets} /v:m
                   			/p:WebProjectOutputDir=${dir.out} 
-                        /p:OutDir=${dir.out.bin}"
+                        /p:OutDir=${dir.out.bin}
+                        /m"
 				  workingdir="." />
 	</target>
 
@@ -45,7 +46,8 @@
 		<exec program="${msbuild}"
 			  commandline="${file.project} /t:ResolveReferences;_CopyWebApplication
         				/p:WebProjectOutputDir=${dir.out}
-        				/p:OutDir=${dir.out.bin}"
+        				/p:OutDir=${dir.out.bin}
+                /m"
 			  workingdir="." />
 	</target>
 

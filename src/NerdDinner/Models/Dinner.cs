@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data.Linq;
 using System.Web.Mvc;
 using NerdDinner.Helpers;
 
 namespace NerdDinner.Models {
 
     [Bind(Include="Title,Description,EventDate,Address,Country,ContactPhone,Latitude,Longitude")]
-    public partial class Dinner {
+    public class Dinner {
 
         public bool IsHostedBy(string userName) {
             return HostedBy.Equals(userName, StringComparison.InvariantCultureIgnoreCase);
@@ -18,9 +17,21 @@ namespace NerdDinner.Models {
             return RSVPs.Any(r => r.AttendeeName.Equals(userName, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        public IList<RSVP> RSVPs { get; set; }
+
+        public Dinner()
+        {
+            RSVPs = new List<RSVP>();
+        }
         public bool IsValid {
             get { return (GetRuleViolations().Count() == 0); }
         }
+
+        public DateTime EventDate { get; set; }
+
+        public int DinnerID { get; set; }
+
+        public string Title { get; set; }
 
         public IEnumerable<RuleViolation> GetRuleViolations() {
 
@@ -48,7 +59,17 @@ namespace NerdDinner.Models {
             yield break;
         }
 
-        partial void OnValidate(ChangeAction action) {
+        public string ContactPhone { get; set; }
+
+        public string Country { get; set; }
+
+        public string HostedBy { get; set; }
+
+        public string Address { get; set; }
+
+        public string Description { get; set; }
+
+        public void OnValidate(/*ChangeAction action*/) {
             if (!IsValid)
                 throw new ApplicationException("Rule violations prevent saving");
         }
@@ -66,5 +87,9 @@ namespace NerdDinner.Models {
             var distance = EARTH_RADIUS_IN_KM * c;
             return distance;
         }
+
+        public double Longitude { get; set; }
+
+        public double Latitude { get; set; }
     }
 }

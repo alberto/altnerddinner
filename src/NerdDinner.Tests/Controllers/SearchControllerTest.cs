@@ -1,15 +1,8 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using NerdDinner.Controllers;
 using System.Web.Mvc;
 using NerdDinner.Models;
-using NerdDinner.Tests.Fakes;
-using Moq;
-using NerdDinner.Helpers;
-using System.Web.Routing;
 
 namespace NerdDinner.Tests.Controllers {
  
@@ -18,7 +11,7 @@ namespace NerdDinner.Tests.Controllers {
 
         SearchController CreateSearchController() {
             var testData = FakeDinnerData.CreateTestDinners();
-            var repository = new FakeDinnerRepository(testData);
+            var repository = new InMemoryDinnerRepository(testData);
 
             return new SearchController(repository);
         }

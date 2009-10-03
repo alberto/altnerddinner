@@ -69,8 +69,6 @@
     <Compile Include="Controllers\RSVPControllerTest.cs" />
     <Compile Include="Controllers\SearchControllerTest.cs" />
     <Compile Include="Controllers\DinnersControllerTest.cs" />
-    <Compile Include="Fakes\FakeDinnerData.cs" />
-    <Compile Include="Fakes\FakeDinnerRepository.cs" />
     <Compile Include="Models\DinnerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
