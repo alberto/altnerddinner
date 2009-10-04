@@ -31,6 +31,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.MicroKernel, Version=2.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Castle.MicroKernel.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="MvcContrib.Castle, Version=1.0.0.10000, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\MvcContrib.Castle.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -72,7 +88,6 @@
     <Compile Include="Helpers\ControllerHelpers.cs" />
     <Compile Include="Helpers\PaginatedList.cs" />
     <Compile Include="Helpers\PhoneValidator.cs" />
-    <Compile Include="Helpers\ServiceLocator.cs" />
     <Compile Include="Models\Dinner.cs" />
     <Compile Include="Models\FakeDinnerData.cs" />
     <Compile Include="Models\IDinnerRepository.cs" />

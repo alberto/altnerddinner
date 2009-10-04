@@ -31,9 +31,6 @@ namespace NerdDinner.Controllers {
 
         IDinnerRepository dinnerRepository;
 
-        public DinnersController() : this(ServiceLocator.Resolve<IDinnerRepository>())
-        {}
-
         public DinnersController(IDinnerRepository repository) {
             dinnerRepository = repository;
         }

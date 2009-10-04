@@ -11,8 +11,8 @@ namespace NerdDinner.Tests.Controllers {
 
         RSVPController CreateRSVPController() {
             var testData = FakeDinnerData.CreateTestDinners();
-            var repository = new InMemoryDinnerRepository(testData);
-
+            var repository = new InMemoryDinnerRepository();
+            repository.AddRange(testData);
             return new RSVPController(repository);
         }
 

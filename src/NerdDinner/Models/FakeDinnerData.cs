@@ -13,7 +13,7 @@ namespace NerdDinner.Models
 
             List<Dinner> dinners = new List<Dinner>();
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 1; i <= 100; i++)
             {
 
                 Dinner sampleDinner = new Dinner()
@@ -26,8 +26,8 @@ namespace NerdDinner.Models
                                               ContactPhone = "425-555-1212",
                                               Description = "Some description",
                                               EventDate = DateTime.Now.AddDays(i),
-                                              Latitude = 12,
-                                              Longitude = -20
+                                              Latitude = 99,
+                                              Longitude = -99
                                       };
 
                 RSVP rsvp = new RSVP();

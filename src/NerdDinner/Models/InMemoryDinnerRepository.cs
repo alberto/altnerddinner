@@ -6,12 +6,7 @@ namespace NerdDinner.Models
 {
     public class InMemoryDinnerRepository : IDinnerRepository
     {
-        private readonly IList<Dinner> _dinners;
-
-        public InMemoryDinnerRepository(IList<Dinner> dinners)
-        {
-            _dinners = dinners;
-        }
+        private readonly IList<Dinner> _dinners = new List<Dinner>();
 
         public IQueryable<Dinner> FindAllDinners()
         {
@@ -42,6 +37,13 @@ namespace NerdDinner.Models
             _dinners.Add(dinner);
         }
 
+        public void AddRange(IEnumerable<Dinner> dinners)
+        {
+            foreach (var dinner in dinners)
+            {
+                Add(dinner);
+            }
+        }
         public void Delete(Dinner dinner)
         {
             _dinners.Remove(dinner);

@@ -11,8 +11,8 @@ namespace NerdDinner.Tests.Controllers {
 
         SearchController CreateSearchController() {
             var testData = FakeDinnerData.CreateTestDinners();
-            var repository = new InMemoryDinnerRepository(testData);
-
+            var repository = new InMemoryDinnerRepository();
+            repository.AddRange(testData);
             return new SearchController(repository);
         }
 
@@ -43,7 +43,7 @@ namespace NerdDinner.Tests.Controllers {
             // Assert
             Assert.IsInstanceOf(typeof(List<JsonDinner>), result.Data);
             var dinners = (List<JsonDinner>)result.Data;
-            Assert.AreEqual(101, dinners.Count);
+            Assert.AreEqual(100, dinners.Count);
         }
     }
 }

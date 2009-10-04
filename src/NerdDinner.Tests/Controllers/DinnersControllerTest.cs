@@ -15,7 +15,11 @@ namespace NerdDinner.Tests.Controllers {
 
         DinnersController CreateDinnersController() {
             var testData = FakeDinnerData.CreateTestDinners();
-            var repository = new InMemoryDinnerRepository(testData);
+            var repository = new InMemoryDinnerRepository();
+            foreach (var dinner in testData)
+            {
+                repository.Add(dinner);
+            }
 
             return new DinnersController(repository);
         }
@@ -327,8 +331,7 @@ namespace NerdDinner.Tests.Controllers {
             mock.SetupGet(p => p.HttpContext.User.Identity.Name).Returns("ScottHa");
             mock.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
-            var testData = FakeDinnerData.CreateTestDinners();
-            var repository = new InMemoryDinnerRepository(testData);
+            var repository = new InMemoryDinnerRepository();
             var controller = new DinnersController(repository);
             controller.ControllerContext = mock.Object;
 
@@ -338,7 +341,7 @@ namespace NerdDinner.Tests.Controllers {
             ActionResult result = (ActionResult)controller.Create(dinner);
 
             // Assert
-            Assert.AreEqual(102, repository.FindAllDinners().Count());
+            Assert.AreEqual(1, repository.FindAllDinners().Count());
             Assert.IsInstanceOf(typeof(RedirectToRouteResult), result);
         }
 
@@ -438,7 +441,7 @@ namespace NerdDinner.Tests.Controllers {
         public void EditAction_Saves_Changes_To_Dinner_1()
         {
             // Arrange
-            var repo = new InMemoryDinnerRepository(FakeDinnerData.CreateTestDinners());
+            var repo = new InMemoryDinnerRepository();
             var controller = CreateDinnersControllerAs("someuser");
             var form = FakeDinnerData.CreateDinnerFormCollection();
             form["Description"] = "New, Updated Description";
@@ -458,7 +461,7 @@ namespace NerdDinner.Tests.Controllers {
         public void EditAction_Fails_With_Wrong_Owner() {
             
             // Arrange
-            var repo = new InMemoryDinnerRepository(FakeDinnerData.CreateTestDinners());
+            var repo = new InMemoryDinnerRepository();
             var controller = CreateDinnersControllerAs("fred");
             var form = FakeDinnerData.CreateDinnerFormCollection();
             controller.ValueProvider = form.ToValueProvider();

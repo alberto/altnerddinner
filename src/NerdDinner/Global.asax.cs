@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using MvcContrib.Castle;
+using NerdDinner.Models;
 
 namespace NerdDinner {
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        private IWindsorContainer container;
 
         public void RegisterRoutes(RouteCollection routes)
         {
@@ -33,6 +36,27 @@ namespace NerdDinner {
         void Application_Start()
         {
             RegisterRoutes(RouteTable.Routes);
+            RegisterComponents();
+            InitializeDinnerRepository(FakeDinnerData.CreateTestDinners());
+        }
+
+        private void InitializeDinnerRepository(List<Dinner> dinners)
+        {
+            var dinnerRepository = container.Resolve<IDinnerRepository>();
+            foreach (var dinner in dinners)
+            {
+                dinnerRepository.Add(dinner);    
+            }
+        }
+
+        private void RegisterComponents()
+        {
+            container = new WindsorContainer();
+            ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
+            container.RegisterControllers(System.Reflection.Assembly.GetExecutingAssembly());
+            container.Register(
+                    Component.For<IDinnerRepository>().ImplementedBy<InMemoryDinnerRepository>()
+                            .ServiceOverrides(new { dinners = FakeDinnerData.CreateTestDinners()}));
         }
 
         protected void Application_BeginRequest(Object sender, EventArgs e)
