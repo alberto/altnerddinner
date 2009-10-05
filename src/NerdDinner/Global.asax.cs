@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using System.Threading;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -13,7 +14,7 @@ namespace NerdDinner {
 
     public class MvcApplication : System.Web.HttpApplication
     {
-        private IWindsorContainer container;
+        private IWindsorContainer _container;
 
         public void RegisterRoutes(RouteCollection routes)
         {
@@ -40,9 +41,9 @@ namespace NerdDinner {
             InitializeDinnerRepository(FakeDinnerData.CreateTestDinners());
         }
 
-        private void InitializeDinnerRepository(List<Dinner> dinners)
+        private void InitializeDinnerRepository(IEnumerable<Dinner> dinners)
         {
-            var dinnerRepository = container.Resolve<IDinnerRepository>();
+            var dinnerRepository = _container.Resolve<IDinnerRepository>();
             foreach (var dinner in dinners)
             {
                 dinnerRepository.Add(dinner);    
@@ -51,20 +52,20 @@ namespace NerdDinner {
 
         private void RegisterComponents()
         {
-            container = new WindsorContainer();
-            ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
-            container.RegisterControllers(System.Reflection.Assembly.GetExecutingAssembly());
-            container.Register(
-                    Component.For<IDinnerRepository>().ImplementedBy<InMemoryDinnerRepository>()
-                            .ServiceOverrides(new { dinners = FakeDinnerData.CreateTestDinners()}));
+            _container = new WindsorContainer();
+            ControllerBuilder.Current.SetControllerFactory(
+                new WindsorControllerFactory(_container));
+            _container.RegisterControllers(Assembly.GetExecutingAssembly());
+            _container.Register(
+                    Component.For<IDinnerRepository>()
+                    .ImplementedBy<InMemoryDinnerRepository>());
         }
 
         protected void Application_BeginRequest(Object sender, EventArgs e)
         {
-            string culturePref = "en-US"; // default culture
+            const string culturePref = "en-US";
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(culturePref);
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
-
         }
     }
 }
