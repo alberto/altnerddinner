@@ -81,8 +81,10 @@
     <Compile Include="Controllers\RSVPControllerTest.cs" />
     <Compile Include="Controllers\SearchControllerTest.cs" />
     <Compile Include="Controllers\DinnersControllerTest.cs" />
+    <Compile Include="Integration\DbManagementTests.cs" />
     <Compile Include="Integration\MapperTests.cs" />
     <Compile Include="Models\DinnerTest.cs" />
+    <Compile Include="NhHelpers\DbManagement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
     <Compile Include="Controllers\AccountControllerTest.cs" />

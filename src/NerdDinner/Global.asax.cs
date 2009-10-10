@@ -8,6 +8,7 @@ using System.Web.Routing;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using MvcContrib.Castle;
+using NerdDinner.Infrastructure;
 using NerdDinner.Models;
 
 namespace NerdDinner {

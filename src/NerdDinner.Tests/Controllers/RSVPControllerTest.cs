@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using NerdDinner.Infrastructure;
+using NUnit.Framework;
 using NerdDinner.Controllers;
 using System.Web.Mvc;
 using NerdDinner.Models;
