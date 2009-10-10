@@ -31,7 +31,7 @@ namespace NerdDinner.Tests.Models {
         public void Dinner_Should_Be_Valid_When_All_Properties_Correct() {
             
             //Arrange
-            Dinner dinner = new Dinner {
+            var dinner = new Dinner {
                 Title = "Test title",
                 Description = "Some description",
                 EventDate = DateTime.Now,

@@ -5,35 +5,35 @@ using System.Web.Mvc;
 using NerdDinner.Helpers;
 
 namespace NerdDinner.Models {
-
     [Bind(Include="Title,Description,EventDate,Address,Country,ContactPhone,Latitude,Longitude")]
     public class Dinner {
 
-        public bool IsHostedBy(string userName) {
+        public virtual bool IsHostedBy(string userName) {
             return HostedBy.Equals(userName, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public bool IsUserRegistered(string userName) {
+        public virtual bool IsUserRegistered(string userName) {
             return RSVPs.Any(r => r.AttendeeName.Equals(userName, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public IList<RSVP> RSVPs { get; set; }
+        public virtual IList<RSVP> RSVPs { get; set; }
 
         public Dinner()
         {
             RSVPs = new List<RSVP>();
         }
-        public bool IsValid {
+
+        public virtual bool IsValid {
             get { return (GetRuleViolations().Count() == 0); }
         }
 
-        public DateTime EventDate { get; set; }
+        public virtual DateTime EventDate { get; set; }
 
-        public int DinnerID { get; set; }
+        public virtual int DinnerID { get; set; }
 
-        public string Title { get; set; }
+        public virtual string Title { get; set; }
 
-        public IEnumerable<RuleViolation> GetRuleViolations() {
+        public virtual IEnumerable<RuleViolation> GetRuleViolations() {
 
             if (String.IsNullOrEmpty(Title))
                 yield return new RuleViolation("Title is required", "Title");
@@ -59,22 +59,22 @@ namespace NerdDinner.Models {
             yield break;
         }
 
-        public string ContactPhone { get; set; }
+        public virtual string ContactPhone { get; set; }
 
-        public string Country { get; set; }
+        public virtual string Country { get; set; }
 
-        public string HostedBy { get; set; }
+        public virtual string HostedBy { get; set; }
 
-        public string Address { get; set; }
+        public virtual string Address { get; set; }
 
-        public string Description { get; set; }
+        public virtual string Description { get; set; }
 
-        public void OnValidate(/*ChangeAction action*/) {
+        public virtual void OnValidate(/*ChangeAction action*/) {
             if (!IsValid)
                 throw new ApplicationException("Rule violations prevent saving");
         }
 
-        public double Distance(float latitude, float longitude)
+        public virtual double Distance(float latitude, float longitude)
         {
             var latitudeDelta = (Latitude - latitude) * Math.PI / 180.0;
             var longitudeDelta = (Longitude - longitude) * Math.PI / 180.0;
@@ -88,8 +88,8 @@ namespace NerdDinner.Models {
             return distance;
         }
 
-        public double Longitude { get; set; }
+        public virtual double Longitude { get; set; }
 
-        public double Latitude { get; set; }
+        public virtual double Latitude { get; set; }
     }
 }

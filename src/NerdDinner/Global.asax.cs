@@ -18,9 +18,8 @@ namespace NerdDinner {
 
         public void RegisterRoutes(RouteCollection routes)
         {
-
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            
             routes.MapRoute(
                 "UpcomingDinners",
                 "Dinners/Page/{page}",
