@@ -10,9 +10,7 @@ namespace NerdDinner.Models {
         IQueryable<Dinner> FindUpcomingDinners();
         Dinner GetDinner(int id);
 
-        void Add(Dinner dinner);
+        void Save(Dinner dinner);
         void Delete(Dinner dinner);
-        
-        void Save();
     }
 }

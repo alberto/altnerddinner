@@ -1,27 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NerdDinner.Models;
+using NHibernate;
+using NHibernate.Linq;
 
 namespace NerdDinner.Infrastructure
 {
     public class NhDinnerRepository : IDinnerRepository
     {
-        private readonly IQueryable<Dinner> _dinners = new List<Dinner>().AsQueryable();
+        private readonly ISession _session;
+
+        public NhDinnerRepository(ISession session)
+        {
+            _session = session;
+        }
+
+        private INHibernateQueryable<Dinner> GetDbContext()
+        {
+            return CurrentSession.Linq<Dinner>();
+        }
+
+        private ISession CurrentSession
+        {
+            get { return _session; }
+        }
 
         public IQueryable<Dinner> FindAllDinners()
         {
-            return _dinners;
+            return GetDbContext();
         }
 
         public IQueryable<Dinner> FindByLocation(float latitude, float longitude)
         {
-            return _dinners.Where(d => d.Distance(latitude, longitude) < 100).AsQueryable();
+            return GetDbContext().Where(d => d.Distance(latitude, longitude) < 100).AsQueryable();
         }
 
         public IQueryable<Dinner> FindUpcomingDinners()
         {
-            return from dinner in _dinners
+            return from dinner in GetDbContext()
                    where dinner.EventDate > DateTime.Now
                    orderby dinner.EventDate
                    select dinner;
@@ -29,25 +45,23 @@ namespace NerdDinner.Infrastructure
 
         public Dinner GetDinner(int id)
         {
-            return _dinners.SingleOrDefault(d => d.DinnerID == id);
+            return GetDbContext().SingleOrDefault(d => d.DinnerID == id);
         }
 
-        public void Add(Dinner dinner)
+        public void Save(Dinner dinner)
         {
-            //_dinners.Add(dinner);
+            if (!dinner.IsValid)
+            {
+                throw new ApplicationException("Rule violations");
+            }
+
+            CurrentSession.SaveOrUpdate(dinner);
         }
+
         public void Delete(Dinner dinner)
         {
-            //_dinners.Remove(dinner);
-        }
-
-        public void Save()
-        {
-            foreach (Dinner dinner in _dinners)
-            {
-                if (!dinner.IsValid)
-                    throw new ApplicationException("Rule violations");
-            }
+            CurrentSession.Delete(dinner);
+            CurrentSession.Flush();
         }
     }
 }

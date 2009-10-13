@@ -17,7 +17,7 @@ namespace NerdDinner.Mappers
             Map(x => x.Latitude).Not.Nullable();
             Map(x => x.Longitude).Not.Nullable();
             Map(x => x.Title).Not.Nullable();
-            HasMany(x => x.RSVPs);
+            HasMany(x => x.RSVPs).Cascade.AllDeleteOrphan();
         }
     }
 }

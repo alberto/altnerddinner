@@ -32,7 +32,7 @@ namespace NerdDinner.Infrastructure
             return _dinners.SingleOrDefault(d => d.DinnerID == id);
         }
 
-        public void Add(Dinner dinner)
+        public void Save(Dinner dinner)
         {
             dinner.DinnerID = _dinners.Count;
             _dinners.Add(dinner);
@@ -42,7 +42,7 @@ namespace NerdDinner.Infrastructure
         {
             foreach (var dinner in dinners)
             {
-                Add(dinner);
+                Save(dinner);
             }
         }
         public void Delete(Dinner dinner)
