@@ -1,4 +1,5 @@
-<%@ Language="C#" Inherits="System.Web.Mvc.ViewUserControl<NerdDinner.Controllers.DinnerFormViewModel>" %>
+<%@ Language="C#" Inherits="System.Web.Mvc.ViewUserControl<DinnerFormViewModel>" %>
+<%@ Import Namespace="NerdDinner.Models"%>
 
 <%= Html.ValidationSummary("Please correct the errors and try again.") %>
 

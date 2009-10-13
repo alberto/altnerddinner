@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NerdDinner.Infrastructure;
+using NHibernate;
 using NUnit.Framework;
 using NerdDinner.Controllers;
 using System.Web.Mvc;
@@ -19,10 +20,13 @@ namespace NerdDinner.Tests.Controllers {
             var repository = new InMemoryDinnerRepository();
             foreach (var dinner in testData)
             {
-                repository.Add(dinner);
+                repository.Save(dinner);
             }
+            var mockedISession = new Mock<ISession>();
+            var mockedTx = new Mock<ITransaction>();
 
-            return new DinnersController(repository);
+            mockedISession.Setup(s => s.BeginTransaction()).Returns(mockedTx.Object);
+            return new DinnersController(mockedISession.Object, repository);
         }
 
         DinnersController CreateDinnersControllerAs(string userName) {
@@ -333,13 +337,17 @@ namespace NerdDinner.Tests.Controllers {
             mock.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
             var repository = new InMemoryDinnerRepository();
-            var controller = new DinnersController(repository);
+            var mockedISession = new Mock<ISession>();
+            var tx = new Mock<ITransaction>();
+
+            mockedISession.Setup(s => s.BeginTransaction()).Returns(tx.Object);
+            var controller = new DinnersController(mockedISession.Object, repository);
             controller.ControllerContext = mock.Object;
 
             var dinner = FakeDinnerData.CreateDinner();
 
             // Act
-            ActionResult result = (ActionResult)controller.Create(dinner);
+            ActionResult result = controller.Create(dinner);
 
             // Assert
             Assert.AreEqual(1, repository.FindAllDinners().Count());
@@ -441,15 +449,13 @@ namespace NerdDinner.Tests.Controllers {
         [Test]
         public void EditAction_Saves_Changes_To_Dinner_1()
         {
-            // Arrange
-            var repo = new InMemoryDinnerRepository();
             var controller = CreateDinnersControllerAs("someuser");
             var form = FakeDinnerData.CreateDinnerFormCollection();
             form["Description"] = "New, Updated Description";
             controller.ValueProvider = form.ToValueProvider();
 
             // Act
-            ActionResult result = (ActionResult)controller.Edit(1, form);
+            var result = (RedirectToRouteResult)controller.Edit(1, form);
             ViewResult detailResult = (ViewResult)controller.Details(1);
             var dinner = detailResult.ViewData.Model as Dinner;
 

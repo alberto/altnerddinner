@@ -17,17 +17,12 @@ namespace NerdDinner.Infrastructure
 
         private INHibernateQueryable<Dinner> GetDbContext()
         {
-            return CurrentSession.Linq<Dinner>();
-        }
-
-        private ISession CurrentSession
-        {
-            get { return _session; }
+            return _session.Linq<Dinner>();
         }
 
         public IQueryable<Dinner> FindAllDinners()
         {
-            return GetDbContext();
+            return GetDbContext().AsQueryable();
         }
 
         public IQueryable<Dinner> FindByLocation(float latitude, float longitude)
@@ -55,13 +50,12 @@ namespace NerdDinner.Infrastructure
                 throw new ApplicationException("Rule violations");
             }
 
-            CurrentSession.SaveOrUpdate(dinner);
+            _session.SaveOrUpdate(dinner);
         }
 
         public void Delete(Dinner dinner)
         {
-            CurrentSession.Delete(dinner);
-            CurrentSession.Flush();
+            _session.Delete(dinner);
         }
     }
 }

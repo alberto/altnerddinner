@@ -1,4 +1,5 @@
 ﻿using NerdDinner.Infrastructure;
+using NHibernate;
 using NUnit.Framework;
 using NerdDinner.Controllers;
 using System.Web.Mvc;
@@ -8,16 +9,20 @@ using Moq;
 namespace NerdDinner.Tests.Controllers {
  
     [TestFixture]
-    public class RSVPControllerTest {
+    public class RsvpControllerTest {
 
-        RSVPController CreateRSVPController() {
+        RsvpController CreateRSVPController() {
             var testData = FakeDinnerData.CreateTestDinners();
             var repository = new InMemoryDinnerRepository();
             repository.AddRange(testData);
-            return new RSVPController(repository);
+            var mockedISession = new Mock<ISession>();
+            var mockedTx = new Mock<ITransaction>();
+
+            mockedISession.Setup(s => s.BeginTransaction()).Returns(mockedTx.Object);
+            return new RsvpController(mockedISession.Object, repository);
         }
 
-        RSVPController CreateRSVPControllerAs(string userName)
+        RsvpController CreateRSVPControllerAs(string userName)
         {
 
             var mock = new Mock<ControllerContext>();

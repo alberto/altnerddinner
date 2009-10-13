@@ -34,8 +34,20 @@ namespace NerdDinner.Infrastructure
 
         public void Save(Dinner dinner)
         {
+            if (!dinner.IsValid)
+                throw new ApplicationException("Rule violations");
+
+            var index = _dinners.IndexOf(_dinners.Where(d => d.DinnerID == dinner.DinnerID).FirstOrDefault());
+            if (index >= 0)
+            {
+                _dinners.RemoveAt(index);
+                _dinners.Insert(index, dinner);
+                return;
+            }
+
             dinner.DinnerID = _dinners.Count;
             _dinners.Add(dinner);
+
         }
 
         public void AddRange(IEnumerable<Dinner> dinners)
@@ -48,15 +60,6 @@ namespace NerdDinner.Infrastructure
         public void Delete(Dinner dinner)
         {
             _dinners.Remove(dinner);
-        }
-
-        public void Save()
-        {
-            foreach (Dinner dinner in _dinners)
-            {
-                if (!dinner.IsValid)
-                    throw new ApplicationException("Rule violations");
-            }
         }
     }
 }

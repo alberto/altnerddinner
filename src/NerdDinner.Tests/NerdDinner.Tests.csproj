@@ -78,7 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\RSVPControllerTest.cs" />
+    <Compile Include="Controllers\RsvpControllerTest.cs" />
     <Compile Include="Controllers\SearchControllerTest.cs" />
     <Compile Include="Controllers\DinnersControllerTest.cs" />
     <Compile Include="Integration\DbManagementTests.cs" />

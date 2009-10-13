@@ -1,4 +1,5 @@
-<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<NerdDinner.Controllers.DinnerFormViewModel>" MasterPageFile="~/Views/Shared/Site.Master" %>
+<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<DinnerFormViewModel>" MasterPageFile="~/Views/Shared/Site.Master" %>
+<%@ Import Namespace="NerdDinner.Models"%>
 
 <asp:Content ID="Title" ContentPlaceHolderID="TitleContent" runat="server">
     Edit: <%=Html.Encode(Model.Dinner.Title) %>

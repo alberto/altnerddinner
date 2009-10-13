@@ -1,18 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using NerdDinner.Models;
+using NHibernate;
 
 namespace NerdDinner.Controllers
 {
-    public class RSVPController : Controller {
+    public class RsvpController : Controller {
+        private readonly ISession _session;
 
-        IDinnerRepository dinnerRepository;
+        private readonly IDinnerRepository _dinnerRepository;
 
-        public RSVPController(IDinnerRepository repository) {
-            dinnerRepository = repository;
+        public RsvpController(ISession session, IDinnerRepository repository)
+        {
+            _session = session;
+            _dinnerRepository = repository;
         }
 
         //
@@ -21,18 +21,17 @@ namespace NerdDinner.Controllers
         [Authorize, AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Register(int id) {
 
-            Dinner dinner = dinnerRepository.GetDinner(id);
+            using (var tx = _session.BeginTransaction())
+            {
+                Dinner dinner = _dinnerRepository.GetDinner(id);
+                if (!dinner.IsUserRegistered(User.Identity.Name)) {
+                    dinner.RSVPs.Add(new RSVP{ AttendeeName = User.Identity.Name });
+                    _dinnerRepository.Save(dinner);
+                    tx.Commit();
+                }
 
-            if (!dinner.IsUserRegistered(User.Identity.Name)) {
-
-                RSVP rsvp = new RSVP();
-                rsvp.AttendeeName = User.Identity.Name;
-
-                dinner.RSVPs.Add(rsvp);
-                dinnerRepository.Save();
+                return Content("Thanks - we'll see you there!");
             }
-
-            return Content("Thanks - we'll see you there!");
         }
     }
 }
