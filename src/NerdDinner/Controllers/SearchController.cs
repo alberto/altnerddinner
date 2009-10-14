@@ -26,7 +26,7 @@ namespace NerdDinner.Controllers {
                                   Longitude = dinner.Longitude,
                                   Title = dinner.Title,
                                   Description = dinner.Description,
-                                  RSVPCount = dinner.RSVPs.Count
+                                  RSVPCount = dinner.NumberOfAtendees
                               };
 
             return Json(jsonDinners.ToList());

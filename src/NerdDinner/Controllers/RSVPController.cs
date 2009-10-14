@@ -25,7 +25,7 @@ namespace NerdDinner.Controllers
             {
                 Dinner dinner = _dinnerRepository.GetDinner(id);
                 if (!dinner.IsUserRegistered(User.Identity.Name)) {
-                    dinner.RSVPs.Add(new RSVP{ AttendeeName = User.Identity.Name });
+                    dinner.AddRsvp(new RSVP{ AttendeeName = User.Identity.Name });
                     _dinnerRepository.Save(dinner);
                     tx.Commit();
                 }

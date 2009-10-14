@@ -121,7 +121,7 @@ namespace NerdDinner.Controllers {
 
                         RSVP rsvp = new RSVP();
                         rsvp.AttendeeName = User.Identity.Name;
-                        dinner.RSVPs.Add(rsvp);
+                        dinner.AddRsvp(rsvp);
                         _dinnerRepository.Save(dinner);
                         tx.Commit();
                         return RedirectToAction("Details", new { id = dinner.DinnerID });

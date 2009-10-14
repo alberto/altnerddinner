@@ -13,14 +13,19 @@ namespace NerdDinner.Models {
         }
 
         public virtual bool IsUserRegistered(string userName) {
-            return RSVPs.Any(r => r.AttendeeName.Equals(userName, StringComparison.InvariantCultureIgnoreCase));
+            return Rsvps.Any(r => r.AttendeeName.Equals(userName, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public virtual IList<RSVP> RSVPs { get; set; }
+        public virtual IEnumerable<RSVP> Rsvps
+        {
+            get { return _rsvps; }
+        }
+
+        private readonly IList<RSVP> _rsvps;
 
         public Dinner()
         {
-            RSVPs = new List<RSVP>();
+            _rsvps = new List<RSVP>();
         }
 
         public virtual bool IsValid {
@@ -91,5 +96,16 @@ namespace NerdDinner.Models {
         public virtual double Longitude { get; set; }
 
         public virtual double Latitude { get; set; }
+
+        public virtual int NumberOfAtendees 
+        {
+            get { return _rsvps.Count; }
+        }
+
+        public virtual void AddRsvp(RSVP rsvp)
+        {
+            _rsvps.Add(rsvp);
+            rsvp.Dinner = this;
+        }
     }
 }

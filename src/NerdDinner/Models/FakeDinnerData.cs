@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web.Mvc;
 
 namespace NerdDinner.Models
@@ -32,7 +30,7 @@ namespace NerdDinner.Models
 
                 RSVP rsvp = new RSVP();
                 rsvp.AttendeeName = "SomeUser";
-                sampleDinner.RSVPs.Add(rsvp);
+                sampleDinner.AddRsvp(rsvp);
 
                 dinners.Add(sampleDinner);
             }

@@ -9,7 +9,7 @@ namespace NerdDinner.Mappers
         {
             Id(x => x.RsvpId);
             Map(x => x.AttendeeName).Not.Nullable();
-            References(r => r.Dinner).Nullable();            
+            References(r => r.Dinner).Not.Nullable();            
         }
     }
 }

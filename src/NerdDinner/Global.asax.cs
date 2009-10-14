@@ -23,6 +23,7 @@ namespace NerdDinner {
         {
             RegisterRoutes(RouteTable.Routes);
             RegisterComponents();
+            log4net.Config.XmlConfigurator.Configure();
         }
 
         private void RegisterRoutes(RouteCollection routes)

@@ -9,3 +9,5 @@ src/*/bin
 obj
 [Rr]elease*/
 _ReSharper*
+/src/NerdDinner/log.txt
+/src/NerdDinner/log.txt
