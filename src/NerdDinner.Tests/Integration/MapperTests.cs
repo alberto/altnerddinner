@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FluentNHibernate.Cfg;
+﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NerdDinner.Infrastructure;
 using NerdDinner.Models;
@@ -13,11 +9,14 @@ namespace NerdDinner.Tests.Integration
 {
     public class MapperTests
     {
+        private string _connString = "Data Source=localhost;Initial Catalog=AltNerdDinner;Integrated Security=True";
 
         [Test, Explicit]
         public void CanBuildSessionFactory()
         {
-            IPersistenceConfigurer dbConfig = new DbConfigFactory().GetGetMsSqlConfig();
+            IPersistenceConfigurer dbConfig =
+                    new MsSqlPersistenceConfigurerFactory(_connString)
+                    .GetPersistenceConfigurer();
             var builder = new SessionFactoryBuilder(dbConfig);
             builder.Build();
         }
@@ -26,7 +25,8 @@ namespace NerdDinner.Tests.Integration
         public void CanExportMappings()
         {
             var cfg = new Configuration();
-            IPersistenceConfigurer dbConfig = new DbConfigFactory().GetGetMsSqlConfig();
+            IPersistenceConfigurer dbConfig =
+                    new MsSqlPersistenceConfigurerFactory(_connString).GetPersistenceConfigurer();
 
             Fluently.Configure(cfg)
                     .Database(dbConfig)

@@ -13,11 +13,11 @@ namespace NerdDinner.Infrastructure
     {
         private static ISessionFactory _sessionFactory;
 
-        private readonly IPersistenceConfigurer _dbConfiguration;
+        private readonly IPersistenceConfigurer _persistenceConfigurer;
 
-        public SessionFactoryBuilder(IPersistenceConfigurer dbConfiguration)
+        public SessionFactoryBuilder(IPersistenceConfigurer persistenceConfigurer)
         {
-            _dbConfiguration = dbConfiguration;
+            _persistenceConfigurer = persistenceConfigurer;
         }
 
         public ISessionFactory Build()
@@ -34,7 +34,7 @@ namespace NerdDinner.Infrastructure
         {
             return Fluently.Configure()
                     .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Dinner>())
-                    .Database(_dbConfiguration)                    
+                    .Database(_persistenceConfigurer)                    
                     .BuildConfiguration();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
@@ -12,15 +13,34 @@ using MvcContrib.Castle;
 using NerdDinner.Infrastructure;
 using NerdDinner.Models;
 using NHibernate;
-using NHibernate.Context;
 
 namespace NerdDinner {
-    public class MvcApplication : HttpApplication
+    public class Global : HttpApplication
     {
+        private static readonly ISessionFactory SessionFactory = CreateSessionFactory();
+
+        private static ISessionFactory CreateSessionFactory()
+        {
+            string connString = ConfigurationManager.ConnectionStrings["AltNerdDinner"].ConnectionString;
+            return new SessionFactoryBuilder(
+                    new MsSqlPersistenceConfigurerFactory(connString)
+                            .GetPersistenceConfigurer())
+                    .Build();
+        }
+
         private IWindsorContainer _container;
 
-        void Application_Start()
+        private readonly NhSessionLifetimeModule _nhSessionLifetimeModule =
+                new NhSessionLifetimeModule(SessionFactory);
+
+        public override void Init()
         {
+            base.Init();
+            _nhSessionLifetimeModule.Init(this);
+        }
+
+        void Application_Start()
+        {                       
             RegisterRoutes(RouteTable.Routes);
             RegisterComponents();
             log4net.Config.XmlConfigurator.Configure();
@@ -53,7 +73,7 @@ namespace NerdDinner {
 
             _container.Register(
                     Component.For<ISession>()
-                            .UsingFactoryMethod(() => _CurrentSession)
+                            .UsingFactoryMethod(() => NhSessionLifetimeModule.CurrentSession)
                             .LifeStyle.Transient);
          
             _container.Register(
@@ -63,55 +83,11 @@ namespace NerdDinner {
             _container.RegisterControllers(Assembly.GetExecutingAssembly());
         }
 
-        private static ISession _CurrentSession
-        {
-            get { return (ISession)HttpContext.Current.Items["current.session"]; }
-            set { HttpContext.Current.Items["current.session"] = value; }
-        }
-
-        private static readonly ISessionFactory SessionFactory = CreateSessionFactory();
-
-        private static ISessionFactory CreateSessionFactory()
-        {
-            return new SessionFactoryBuilder(
-                    new DbConfigFactory().GetGetMsSqlConfig())
-                    .Build();
-        }
-
         protected void Application_BeginRequest(Object sender, EventArgs e)
         {
-            const string culturePref = "en-US";
-            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(culturePref);
+            const string CULTURE = "en-US";
+            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(CULTURE);
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
-            _CurrentSession = SessionFactory.OpenSession();
-        }
-
-        protected void Application_EndRequest(Object sender, EventArgs e)
-        {
-            if (_CurrentSession != null)
-            {
-                RollBackTransactionIfUncommited();
-
-                CloseSessionIfOpen();
-
-                _CurrentSession.Dispose();
-            }
-        }
-
-        private void CloseSessionIfOpen()
-        {
-            if (_CurrentSession.IsOpen)
-            {
-                _CurrentSession.Close();       
-            }
-        }
-
-        private void RollBackTransactionIfUncommited()
-        {
-            if (_CurrentSession.Transaction != null && _CurrentSession.Transaction.IsActive)
-            {
-                _CurrentSession.Transaction.Rollback();
-            }
         }
     }
 }

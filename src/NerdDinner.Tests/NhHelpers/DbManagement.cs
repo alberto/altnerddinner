@@ -1,31 +1,37 @@
 ﻿using System.Collections.Generic;
 using FluentNHibernate.Cfg.Db;
 using NerdDinner.Infrastructure;
-using NerdDinner.Models;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 
 namespace NerdDinner.Tests.NhHelpers
 {
-    public class DbManagement
+    public static class DbManagement
     {
-        public void CreateDB(IPersistenceConfigurer dbConfig)
+        public static void UpdateDb(IPersistenceConfigurer dbConfig)
         {
             Configuration nhConfig = new SessionFactoryBuilder(dbConfig).GetDbConfiguration();
             new SchemaExport(nhConfig).Execute(true, true, false);
         }
 
-        public void InitializeRepository(IStatelessSession session, IEnumerable<Dinner> dinners)
+        public static void UpdateAndInitializeDb<T>(IPersistenceConfigurer dbConfigurer, IEnumerable<T> initialData)
+        {
+            UpdateDb(dbConfigurer);
+            InitializeRepository(
+                    new SessionFactoryBuilder(dbConfigurer).Build().OpenStatelessSession(),
+                    initialData);
+        }
+
+        private static void InitializeRepository<T>(IStatelessSession session, IEnumerable<T> entities)
         {            
             using (session)
             using (var tx = session.BeginTransaction())
             {
-                foreach (var dinner in dinners)
+                foreach (T entity in entities)
                 {
-                    session.Insert(dinner);
+                    session.Insert(entity);
                 }
-
                 tx.Commit();
             }
         }
