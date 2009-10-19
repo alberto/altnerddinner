@@ -18,6 +18,7 @@ namespace NerdDinner {
     public class Global : HttpApplication
     {
         private static readonly ISessionFactory SessionFactory = CreateSessionFactory();
+        private static IWindsorContainer _container;
 
         private static ISessionFactory CreateSessionFactory()
         {
@@ -28,10 +29,8 @@ namespace NerdDinner {
                     .Build();
         }
 
-        private IWindsorContainer _container;
-
-        private readonly NhSessionLifetimeModule _nhSessionLifetimeModule =
-                new NhSessionLifetimeModule(SessionFactory);
+        private readonly NhSessionPerRequestModule _nhSessionLifetimeModule =
+                new NhSessionPerRequestModule(SessionFactory);
 
         public override void Init()
         {
@@ -73,7 +72,7 @@ namespace NerdDinner {
 
             _container.Register(
                     Component.For<ISession>()
-                            .UsingFactoryMethod(() => NhSessionLifetimeModule.CurrentSession)
+                            .UsingFactoryMethod(() => NhSessionPerRequestModule.CurrentSession)
                             .LifeStyle.Transient);
          
             _container.Register(

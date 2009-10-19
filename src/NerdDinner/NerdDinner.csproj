@@ -97,7 +97,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Infrastructure\IPersistenceConfigurerFactory.cs" />
     <Compile Include="Infrastructure\MsSqlPersistenceConfigurerFactory.cs" />
-    <Compile Include="Infrastructure\NhSessionLifetimeModule.cs" />
+    <Compile Include="Infrastructure\NhSessionPerRequestModule.cs" />
     <Compile Include="Infrastructure\SqLitePersistenceConfigurerFactory.cs" />
     <Compile Include="Models\JsonDinner.cs" />
     <Compile Include="Models\DinnerFormViewModel.cs" />

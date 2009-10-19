@@ -3,11 +3,11 @@ using NHibernate;
 
 namespace NerdDinner.Infrastructure
 {
-    public class NhSessionLifetimeModule : IHttpModule
+    public class NhSessionPerRequestModule : IHttpModule
     {
         private readonly ISessionFactory _sessionFactory;
 
-        public NhSessionLifetimeModule(ISessionFactory sessionFactory)
+        public NhSessionPerRequestModule(ISessionFactory sessionFactory)
         {
             _sessionFactory = sessionFactory;
         }
