@@ -7,7 +7,7 @@ namespace NerdDinner.Infrastructure
     {
         public IPersistenceConfigurer GetPersistenceConfigurer()
         {
-            return SQLiteConfiguration.Standard.InMemory()
+            return SQLiteConfiguration.Standard.UsingFile("sqlite.db")
                 .ShowSql()
                 .FormatSql()
                 .ProxyFactoryFactory<ProxyFactoryFactory>();

@@ -1,25 +1,18 @@
 ﻿using NerdDinner.Infrastructure;
-using NHibernate;
+using NerdDinner.Tests.NhHelpers;
 using NUnit.Framework;
 using NerdDinner.Controllers;
 using System.Web.Mvc;
-using NerdDinner.Models;
 using Moq;
 
 namespace NerdDinner.Tests.Controllers {
  
     [TestFixture]
-    public class RsvpControllerTest {
-
+    public class RsvpControllerTest : NhInMemoryFixtureBase
+    {
         RsvpController CreateRSVPController() {
-            var testData = FakeDinnerData.CreateTestDinners();
-            var repository = new InMemoryDinnerRepository();
-            repository.AddRange(testData);
-            var mockedISession = new Mock<ISession>();
-            var mockedTx = new Mock<ITransaction>();
-
-            mockedISession.Setup(s => s.BeginTransaction()).Returns(mockedTx.Object);
-            return new RsvpController(mockedISession.Object, repository);
+            var repository = new NhDinnerRepository(Session);
+            return new RsvpController(Session, repository);
         }
 
         RsvpController CreateRSVPControllerAs(string userName)

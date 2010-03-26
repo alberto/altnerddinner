@@ -28,6 +28,15 @@ namespace NerdDinner.Tests.Integration
         }
 
         [Test, Explicit]
+        public void InitializeSqliteDb()
+        {
+            IPersistenceConfigurer dbConfig =
+                    new SqLitePersistenceConfigurerFactory().GetPersistenceConfigurer();
+            DbManagement.UpdateAndInitializeDb(dbConfig, FakeDinnerData.CreateTestDinners());
+        }
+
+
+        [Test, Explicit]
         public void InitializeMsSqlDb()
         {
             IPersistenceConfigurer dbConfig =

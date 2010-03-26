@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Infrastructure\IPersistenceConfigurerFactory.cs" />
     <Compile Include="Infrastructure\MsSqlPersistenceConfigurerFactory.cs" />
     <Compile Include="Infrastructure\NhSessionPerRequestModule.cs" />
@@ -102,7 +103,6 @@
     <Compile Include="Models\JsonDinner.cs" />
     <Compile Include="Models\DinnerFormViewModel.cs" />
     <Compile Include="Controllers\DinnersController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\RsvpController.cs">
       <SubType>Code</SubType>

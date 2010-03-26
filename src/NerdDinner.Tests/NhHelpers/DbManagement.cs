@@ -17,9 +17,12 @@ namespace NerdDinner.Tests.NhHelpers
 
         public static void UpdateAndInitializeDb<T>(IPersistenceConfigurer dbConfigurer, IEnumerable<T> initialData)
         {
-            UpdateDb(dbConfigurer);
+            var sessionFactoryBuilder = new SessionFactoryBuilder(dbConfigurer);
+            Configuration nhConfig = sessionFactoryBuilder.GetDbConfiguration();
+            ISessionFactory sessionFactory = nhConfig.BuildSessionFactory();
+            new SchemaExport(nhConfig).Execute(true, true, false);
             InitializeRepository(
-                    new SessionFactoryBuilder(dbConfigurer).Build().OpenStatelessSession(),
+                    sessionFactory.OpenStatelessSession(),
                     initialData);
         }
 

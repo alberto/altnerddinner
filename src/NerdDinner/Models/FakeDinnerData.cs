@@ -16,7 +16,6 @@ namespace NerdDinner.Models
 
                 Dinner sampleDinner = new Dinner()
                                       {
-                                              DinnerID = i,
                                               Title = "Sample Dinner",
                                               HostedBy = "SomeUser",
                                               Address = "California",

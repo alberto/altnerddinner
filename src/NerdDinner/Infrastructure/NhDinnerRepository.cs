@@ -27,7 +27,15 @@ namespace NerdDinner.Infrastructure
 
         public IQueryable<Dinner> FindByLocation(float latitude, float longitude)
         {
-            return GetDbContext().Where(d => d.Distance(latitude, longitude) < 100).AsQueryable();
+            // TODO: Doesn't work in L2NH yet
+            //return FindUpcomingDinners().Where(d => d.Distance(latitude, longitude) < 100).AsQueryable();
+            var query = GetDbContext()
+                .Expand("Rsvps")
+                .Where(d => d.EventDate > DateTime.Now)                
+                .ToList() //Needed because Distance() in not an Expression tree
+                .Where(d => d.Distance(latitude, longitude) < 100)
+                .AsQueryable();
+            return query;
         }
 
         public IQueryable<Dinner> FindUpcomingDinners()
@@ -37,7 +45,7 @@ namespace NerdDinner.Infrastructure
                    orderby dinner.EventDate
                    select dinner;
         }
-
+        
         public Dinner GetDinner(int id)
         {
             return GetDbContext().SingleOrDefault(d => d.DinnerID == id);

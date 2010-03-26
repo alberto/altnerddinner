@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NerdDinner.Infrastructure;
+using NerdDinner.Tests.NhHelpers;
 using NHibernate;
 using NUnit.Framework;
 using NerdDinner.Controllers;
@@ -13,20 +14,12 @@ using NerdDinner.Helpers;
 namespace NerdDinner.Tests.Controllers {
  
     [TestFixture]
-    public class DinnersControllerTest {
+    public class DinnersControllerTest : NhInMemoryFixtureBase
+    {
 
         DinnersController CreateDinnersController() {
-            var testData = FakeDinnerData.CreateTestDinners();
-            var repository = new InMemoryDinnerRepository();
-            foreach (var dinner in testData)
-            {
-                repository.Save(dinner);
-            }
-            var mockedISession = new Mock<ISession>();
-            var mockedTx = new Mock<ITransaction>();
-
-            mockedISession.Setup(s => s.BeginTransaction()).Returns(mockedTx.Object);
-            return new DinnersController(mockedISession.Object, repository);
+            var repository = new NhDinnerRepository(Session);
+            return new DinnersController(Session, repository);
         }
 
         DinnersController CreateDinnersControllerAs(string userName) {
@@ -336,12 +329,9 @@ namespace NerdDinner.Tests.Controllers {
             mock.SetupGet(p => p.HttpContext.User.Identity.Name).Returns("ScottHa");
             mock.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
-            var repository = new InMemoryDinnerRepository();
-            var mockedISession = new Mock<ISession>();
-            var tx = new Mock<ITransaction>();
+            var repository = new NhDinnerRepository(Session);
 
-            mockedISession.Setup(s => s.BeginTransaction()).Returns(tx.Object);
-            var controller = new DinnersController(mockedISession.Object, repository);
+            var controller = new DinnersController(Session, repository);
             controller.ControllerContext = mock.Object;
 
             var dinner = FakeDinnerData.CreateDinner();
@@ -350,7 +340,7 @@ namespace NerdDinner.Tests.Controllers {
             ActionResult result = controller.Create(dinner);
 
             // Assert
-            Assert.AreEqual(1, repository.FindAllDinners().Count());
+            Assert.AreEqual(101, repository.FindAllDinners().Count());
             Assert.IsInstanceOf(typeof(RedirectToRouteResult), result);
         }
 
@@ -468,7 +458,6 @@ namespace NerdDinner.Tests.Controllers {
         public void EditAction_Fails_With_Wrong_Owner() {
             
             // Arrange
-            var repo = new InMemoryDinnerRepository();
             var controller = CreateDinnersControllerAs("fred");
             var form = FakeDinnerData.CreateDinnerFormCollection();
             controller.ValueProvider = form.ToValueProvider();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web.Mvc;
 using NerdDinner.Helpers;
 
@@ -96,11 +97,6 @@ namespace NerdDinner.Models {
         public virtual double Longitude { get; set; }
 
         public virtual double Latitude { get; set; }
-
-        public virtual int NumberOfAtendees 
-        {
-            get { return _rsvps.Count; }
-        }
 
         public virtual void AddRsvp(RSVP rsvp)
         {

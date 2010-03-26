@@ -1,35 +1,40 @@
 using System.Linq;
 using System.Web.Mvc;
 using NerdDinner.Models;
+using NHibernate;
 
 namespace NerdDinner.Controllers {
     public class SearchController : Controller {
+        private readonly ISession _session;
 
-        IDinnerRepository dinnerRepository;
+        private readonly IDinnerRepository _dinnerRepository;
 
-        public SearchController(IDinnerRepository repository) {
-            dinnerRepository = repository;
+        public SearchController(ISession session, IDinnerRepository repository)
+        {
+            _session = session;
+            _dinnerRepository = repository;
         }
 
-        //
-        // AJAX: /Search/FindByLocation?longitude=45&latitude=-90
-
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult SearchByLocation(float latitude, float longitude) {
+        public JsonResult SearchByLocation(float latitude, float longitude) {
 
-            var dinners = dinnerRepository.FindByLocation(latitude, longitude);
+            using (_session.BeginTransaction())
+            {                
+                var dinners = _dinnerRepository.FindByLocation(latitude, longitude);
 
-            var jsonDinners = from dinner in dinners
-                              select new JsonDinner {
-                                  DinnerID = dinner.DinnerID,
-                                  Latitude = dinner.Latitude,
-                                  Longitude = dinner.Longitude,
-                                  Title = dinner.Title,
-                                  Description = dinner.Description,
-                                  RSVPCount = dinner.NumberOfAtendees
-                              };
+                var jsonDinners = from dinner in dinners.ToList()
+                                  select new JsonDinner()
+                                  {
+                                      DinnerID = dinner.DinnerID,
+                                      Latitude = dinner.Latitude,
+                                      Longitude = dinner.Longitude,
+                                      Title = dinner.Title,
+                                      Description = dinner.Description,
+                                      RSVPCount = dinner.Rsvps.Count(),
+                                  };
 
-            return Json(jsonDinners.ToList());
+                return Json(jsonDinners.ToList());                
+            }
         }
     }
 }
