@@ -13,16 +13,6 @@ namespace NerdDinner.Tests.Controllers {
 
     [TestFixture]
     public class AccountControllerTest {
-
-        [Test]
-        public void ConstructorSetsPropertiesToDefaultValues() {
-            var formsAuthentication = new Mock<IFormsAuthentication>().Object;
-            var controller = new AccountController(formsAuthentication);
-
-            // Assert
-            Assert.IsNotNull(controller.FormsAuth, "FormsAuth property is null.");
-        }
-
         [Test]
         public void LoginGet() {
             // Arrange
