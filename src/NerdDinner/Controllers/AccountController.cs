@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Globalization;
-using System.Security.Principal;
 using System.Web.Mvc;
+using NerdDinner.Infrastructure;
+using NerdDinner.Models;
 
 namespace NerdDinner.Controllers {
 
@@ -38,9 +38,7 @@ namespace NerdDinner.Controllers {
             if (!String.IsNullOrEmpty(returnUrl)) {
                 return Redirect(returnUrl);
             }
-            else {
-                return RedirectToAction("Index", "Home");
-            }
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult LogOff() {

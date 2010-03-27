@@ -95,9 +95,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\FormsAuthenticationService.cs" />
+    <Compile Include="Infrastructure\FormsAuthenticationService.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\IFormsAuthentication.cs" />
+    <Compile Include="Models\IFormsAuthentication.cs" />
     <Compile Include="Infrastructure\IPersistenceConfigurerFactory.cs" />
     <Compile Include="Infrastructure\MsSqlPersistenceConfigurerFactory.cs" />
     <Compile Include="Infrastructure\NhSessionPerRequestModule.cs" />

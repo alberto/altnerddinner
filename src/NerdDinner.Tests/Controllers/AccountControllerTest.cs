@@ -5,8 +5,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using Moq;
+using NerdDinner.Models;
 using NUnit.Framework;
-using NerdDinner;
 using NerdDinner.Controllers;
 
 namespace NerdDinner.Tests.Controllers {
