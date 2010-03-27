@@ -15,131 +15,12 @@ namespace NerdDinner.Tests.Controllers {
     public class AccountControllerTest {
 
         [Test]
-        public void ChangePasswordGetReturnsView() {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            ViewResult result = (ViewResult)controller.ChangePassword();
-
-            // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
-        }
-
-        [Test]
-        public void ChangePasswordPostRedirectsOnSuccess() {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            RedirectToRouteResult result = (RedirectToRouteResult)controller.ChangePassword("oldPass", "newPass", "newPass");
-
-            // Assert
-            Assert.AreEqual("ChangePasswordSuccess", result.RouteValues["action"]);
-        }
-
-        [Test]
-        public void ChangePasswordPostReturnsViewIfCurrentPasswordNotSpecified() {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            ViewResult result = (ViewResult)controller.ChangePassword("", "newPassword", "newPassword");
-
-            // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
-            Assert.AreEqual("You must specify a current password.", result.ViewData.ModelState["currentPassword"].Errors[0].ErrorMessage);
-        }
-
-        [Test]
-        public void ChangePasswordPostReturnsViewIfNewPasswordDoesNotMatchConfirmPassword() {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            ViewResult result = (ViewResult)controller.ChangePassword("currentPassword", "newPassword", "otherPassword");
-
-            // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
-            Assert.AreEqual("The new password and confirmation password do not match.", result.ViewData.ModelState["_FORM"].Errors[0].ErrorMessage);
-        }
-
-        [Test]
-        public void ChangePasswordPostReturnsViewIfNewPasswordIsNull() {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            ViewResult result = (ViewResult)controller.ChangePassword("currentPassword", null, null);
-
-            // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
-            Assert.AreEqual("You must specify a new password of 6 or more characters.", result.ViewData.ModelState["newPassword"].Errors[0].ErrorMessage);
-        }
-
-        [Test]
-        public void ChangePasswordPostReturnsViewIfNewPasswordIsTooShort() {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            ViewResult result = (ViewResult)controller.ChangePassword("currentPassword", "12345", "12345");
-
-            // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
-            Assert.AreEqual("You must specify a new password of 6 or more characters.", result.ViewData.ModelState["newPassword"].Errors[0].ErrorMessage);
-        }
-
-        [Test]
-        public void ChangePasswordPostReturnsViewIfProviderRejectsPassword() {
-            // Arrange
-            var membershipProvider = new Mock<IMembershipService>();
-            membershipProvider.Setup(
-                    m => m.ChangePassword(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(false);
-            AccountController controller = new AccountController(new MockFormsAuthenticationService(), null);
-
-            // Act
-            ViewResult result = (ViewResult)controller.ChangePassword("oldPass", "badPass", "badPass");
-
-            // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
-            Assert.AreEqual("The current password is incorrect or the new password is invalid.", result.ViewData.ModelState["_FORM"].Errors[0].ErrorMessage);
-        }
-
-        [Test]
-        public void ChangePasswordSuccess() {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            ViewResult result = (ViewResult)controller.ChangePasswordSuccess();
-
-            // Assert
-            Assert.IsNotNull(result);
-        }
-
-        [Test]
-        public void ConstructorSetsProperties() {
-            // Arrange
-            IFormsAuthentication formsAuth = new MockFormsAuthenticationService();
-            IMembershipService membershipService = new FakeMembershipService();
-
-            // Act
-            AccountController controller = new AccountController(formsAuth, membershipService);
-
-            // Assert
-            Assert.AreEqual(formsAuth, controller.FormsAuth, "FormsAuth property did not match.");
-            Assert.AreEqual(membershipService, controller.MembershipService, "MembershipService property did not match.");
-        }
-
-        [Test]
         public void ConstructorSetsPropertiesToDefaultValues() {
-            // Act
-            AccountController controller = new AccountController();
+            var formsAuthentication = new Mock<IFormsAuthentication>().Object;
+            var controller = new AccountController(formsAuthentication);
 
             // Assert
             Assert.IsNotNull(controller.FormsAuth, "FormsAuth property is null.");
-            Assert.IsNotNull(controller.MembershipService, "MembershipService property is null.");
         }
 
         [Test]
@@ -180,19 +61,6 @@ namespace NerdDinner.Tests.Controllers {
         }
 
         [Test]
-        public void LoginPostReturnsViewIfPasswordNotSpecified() {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            ViewResult result = (ViewResult)controller.LogOn("username", "", true, null);
-
-            // Assert
-            Assert.AreEqual(true, result.ViewData["rememberMe"]);
-            Assert.AreEqual("You must specify a password.", result.ViewData.ModelState["password"].Errors[0].ErrorMessage);
-        }
-
-        [Test]
         public void LoginPostReturnsViewIfUsernameNotSpecified() {
             // Arrange
             AccountController controller = GetAccountController();
@@ -203,21 +71,6 @@ namespace NerdDinner.Tests.Controllers {
             // Assert
             Assert.AreEqual(false, result.ViewData["rememberMe"]);
             Assert.AreEqual("You must specify a username.", result.ViewData.ModelState["username"].Errors[0].ErrorMessage);
-        }
-
-        [Test]
-        public void LoginPostReturnsViewIfUsernameOrPasswordIsIncorrect() {
-            // Arrange
-            var membershipService = new Mock<IMembershipService>();
-            membershipService.Setup(m => m.ValidateUser("someUser", "badPass")).Returns(false);
-            AccountController controller = new AccountController(new MockFormsAuthenticationService(), membershipService.Object);
-
-            // Act
-            ViewResult result = (ViewResult)controller.LogOn("someUser", "badPass", true, null);
-
-            // Assert
-            Assert.AreEqual(true, result.ViewData["rememberMe"]);
-            Assert.AreEqual("The username or password provided is incorrect.", result.ViewData.ModelState["_FORM"].Errors[0].ErrorMessage);
         }
 
         [Test]
@@ -234,24 +87,12 @@ namespace NerdDinner.Tests.Controllers {
         }
 
         [Test]
-        public void RegisterGet() {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            ViewResult result = (ViewResult)controller.Register();
-
-            // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
-        }
-
-        [Test]
         public void RegisterPostRedirectsHomeIfRegistrationSuccessful() {
             // Arrange
             AccountController controller = GetAccountController();
 
             // Act
-            RedirectToRouteResult result = (RedirectToRouteResult)controller.Register("someUser", "email", "goodPass", "goodPass");
+            RedirectToRouteResult result = (RedirectToRouteResult)controller.Register("someUser", "email");
 
             // Assert
             Assert.AreEqual("Home", result.RouteValues["controller"]);
@@ -264,64 +105,10 @@ namespace NerdDinner.Tests.Controllers {
             AccountController controller = GetAccountController();
 
             // Act
-            ViewResult result = (ViewResult)controller.Register("username", "", "password", "password");
+            ViewResult result = (ViewResult)controller.Register("username", "");
 
             // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
             Assert.AreEqual("You must specify an email address.", result.ViewData.ModelState["email"].Errors[0].ErrorMessage);
-        }
-
-        [Test]
-        public void RegisterPostReturnsViewIfNewPasswordDoesNotMatchConfirmPassword() {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            ViewResult result = (ViewResult)controller.Register("username", "email", "password", "password2");
-
-            // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
-            Assert.AreEqual("The new password and confirmation password do not match.", result.ViewData.ModelState["_FORM"].Errors[0].ErrorMessage);
-        }
-
-        [Test]
-        public void RegisterPostReturnsViewIfPasswordIsNull() {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            ViewResult result = (ViewResult)controller.Register("username", "email", null, null);
-
-            // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
-            Assert.AreEqual("You must specify a password of 6 or more characters.", result.ViewData.ModelState["password"].Errors[0].ErrorMessage);
-        }
-
-        [Test]
-        public void RegisterPostReturnsViewIfPasswordIsTooShort() {
-            // Arrange
-            AccountController controller = GetAccountController();
-
-            // Act
-            ViewResult result = (ViewResult)controller.Register("username", "email", "12345", "12345");
-
-            // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
-            Assert.AreEqual("You must specify a password of 6 or more characters.", result.ViewData.ModelState["password"].Errors[0].ErrorMessage);
-        }
-
-        [Test]
-        public void RegisterPostReturnsViewIfRegistrationFails() {
-            // Arrange
-            var memebershipService = new Mock<IMembershipService>();
-            memebershipService.Setup(m => m.CreateUser("someUser", "badPass", "DuplicateUserName")).Returns(MembershipCreateStatus.DuplicateUserName);
-            AccountController controller = new AccountController(new MockFormsAuthenticationService(), memebershipService.Object);
-
-            // Act
-            ViewResult result = (ViewResult)controller.Register("someUser", "DuplicateUserName" /* error */, "badPass", "badPass");
-
-            // Assert
-            Assert.AreEqual("Username already exists. Please enter a different user name.", result.ViewData.ModelState["_FORM"].Errors[0].ErrorMessage);
         }
 
         [Test]
@@ -330,18 +117,15 @@ namespace NerdDinner.Tests.Controllers {
             AccountController controller = GetAccountController();
 
             // Act
-            ViewResult result = (ViewResult)controller.Register("", "email", "password", "password");
+            ViewResult result = (ViewResult)controller.Register("", "email");
 
             // Assert
-            Assert.AreEqual(6, result.ViewData["PasswordLength"]);
             Assert.AreEqual("You must specify a username.", result.ViewData.ModelState["username"].Errors[0].ErrorMessage);
         }
 
         private static AccountController GetAccountController() {
             IFormsAuthentication formsAuth = new MockFormsAuthenticationService();
-            MembershipProvider membershipProvider = new MockMembershipProvider();
-            FakeMembershipService membershipService = new FakeMembershipService();
-            AccountController controller = new AccountController(formsAuth, membershipService);
+            AccountController controller = new AccountController(formsAuth);
             ControllerContext controllerContext = new ControllerContext(new MockHttpContext(), new RouteData(), controller);
             controller.ControllerContext = controllerContext;
             return controller;

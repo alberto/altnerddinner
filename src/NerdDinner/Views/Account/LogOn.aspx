@@ -21,11 +21,6 @@
                     <%= Html.ValidationMessage("username") %>
                 </p>
                 <p>
-                    <label for="password">Password:</label>
-                    <%= Html.Password("password") %>
-                    <%= Html.ValidationMessage("password") %>
-                </p>
-                <p>
                     <%= Html.CheckBox("rememberMe") %> <label class="inline" for="rememberMe">Remember me?</label>
                 </p>
                 <p>

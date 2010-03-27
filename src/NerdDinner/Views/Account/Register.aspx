@@ -9,9 +9,7 @@
     <p>
         Use the form below to create a new account. 
     </p>
-    <p>
-        Passwords are required to be a minimum of <%=Html.Encode(ViewData["PasswordLength"])%> characters in length.
-    </p>
+
     <%= Html.ValidationSummary() %>
 
     <% using (Html.BeginForm()) { %>
@@ -27,16 +25,6 @@
                     <label for="email">Email:</label>
                     <%= Html.TextBox("email") %>
                     <%= Html.ValidationMessage("email") %>
-                </p>
-                <p>
-                    <label for="password">Password:</label>
-                    <%= Html.Password("password") %>
-                    <%= Html.ValidationMessage("password") %>
-                </p>
-                <p>
-                    <label for="confirmPassword">Confirm password:</label>
-                    <%= Html.Password("confirmPassword") %>
-                    <%= Html.ValidationMessage("confirmPassword") %>
                 </p>
                 <p>
                     <input type="submit" value="Register" />

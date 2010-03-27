@@ -48,7 +48,7 @@ namespace NerdDinner {
         private void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            
+            routes.IgnoreRoute("favicon.ico");
             routes.MapRoute(
                 "UpcomingDinners",
                 "Dinners/Page/{page}",
@@ -78,7 +78,9 @@ namespace NerdDinner {
             _container.Register(
                     Component.For<IDinnerRepository>()
                             .ImplementedBy<NhDinnerRepository>().LifeStyle.Transient);
-
+            _container.Register(
+                    Component.For<IFormsAuthentication>()
+                            .ImplementedBy<FormsAuthenticationService>().LifeStyle.Transient);
             _container.RegisterControllers(Assembly.GetExecutingAssembly());
         }
 
