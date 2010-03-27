@@ -82,15 +82,10 @@ namespace NerdDinner.Models {
 
         public virtual double Distance(float latitude, float longitude)
         {
-            var latitudeDelta = (Latitude - latitude) * Math.PI / 180.0;
-            var longitudeDelta = (Longitude - longitude) * Math.PI / 180.0;
-            // Intermediate result. what is this? i don't know.
-            var a = Math.Sqrt(Math.Sin(latitudeDelta / 2.0)) + Math.Cos(Latitude) * Math.Cos(latitude)
-                                                               * Math.Pow(Math.Sin(longitudeDelta / 2.0), 2);
-            // Intermediate result c (great circle distance in Radians).
-            var c = 2.0 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1.0 - a));
-            const double EARTH_RADIUS_IN_KM = 6376.5;
-            var distance = EARTH_RADIUS_IN_KM * c;
+            const double EARTH_RADIUS_IN_KM = 6371;
+            var distance = Math.Acos(Math.Sin(Latitude) * Math.Sin(latitude) +
+                              Math.Cos(Latitude) * Math.Cos(latitude) *
+                              Math.Cos(Longitude - longitude)) * EARTH_RADIUS_IN_KM;
             return distance;
         }
 
